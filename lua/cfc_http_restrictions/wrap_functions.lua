@@ -1,5 +1,20 @@
-local function logRequest( method, url, fileLocation )
-    MsgC( Color(235, 226, 52), method, Color(136, 151, 158), " - ", Color(235, 226, 52), url, Color(235, 226, 52), "\n    ", fileLocation, "\n" )
+local function logRequest( method, url, fileLocation, allowed )
+    local blockedColor, blockedText
+    if allowed then
+        blockedText = "ALLOWED"
+        blockedColor = Color(0, 255, 0)
+    else
+        blockedText = "BLOCKED"
+        blockedColor = Color(255, 0, 0)
+    end
+    MsgC(
+        blockedColor, blockedText,
+        Color(136, 151, 158), ": ",
+        Color(235, 226, 52), method,
+        Color(136, 151, 158), " - ",
+        Color(235, 226, 52), url,
+        Color(235, 226, 52), "\n    ", fileLocation, "\n"
+    )
 end
 
 local function wrapHTTP()
@@ -7,10 +22,11 @@ local function wrapHTTP()
     print("HTTP wrapped, original function at '_G._HTTP'")
 
     HTTP = function( req )
+        local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest(req.method, req.url, stack[3] )
+        logRequest(req.method, req.url, stack[3], isAllowed )
         local onFailure = req.failed
-        if not CFCHTTP.isAllowed( url ) then
+        if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
         end
@@ -23,9 +39,10 @@ local function wrapFetch()
     print("http.Fetch wrapped, original function at '_http_Fetch'")
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
+        local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest( "GET", url, stack[3] )
-        if not CFCHTTP.isAllowed( url ) then
+        logRequest( "GET", url, stack[3], isAllowed )
+        if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
         end
@@ -39,9 +56,10 @@ local function wrapPost()
     print("http.Post wrapped, original function at '_http_Post'")
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
+        local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest( "POST", url, stack[3] )
-        if not CFCHTTP.isAllowed( url ) then
+        logRequest( "POST", url, stack[3], isAllowed )
+        if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
         end
@@ -56,9 +74,10 @@ local function wrapPlayURL()
     print("sound.PlayURL wrapped, original function at _sound_PlayUrl")
 
     sound.PlayURL = function( url, flags, callback )
+         local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest( "GET", url, stack[3] )
-        if not CFCHTTP.isAllowed( url ) then
+        logRequest( "GET", url, stack[3], isAllowed )
+        if not isAllowed then
             if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
             return
         end
