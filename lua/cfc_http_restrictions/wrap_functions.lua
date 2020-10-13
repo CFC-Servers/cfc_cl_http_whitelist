@@ -74,7 +74,7 @@ local function wrapPlayURL()
     print("sound.PlayURL wrapped, original function at _sound_PlayUrl")
 
     sound.PlayURL = function( url, flags, callback )
-         local isAllowed = CFCHTTP.isAllowed( url )
+        local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
         logRequest( "GET", url, stack[3], isAllowed )
         if not isAllowed then
