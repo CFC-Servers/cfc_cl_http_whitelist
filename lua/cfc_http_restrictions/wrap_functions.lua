@@ -19,12 +19,12 @@ end
 
 local function wrapHTTP()
     _HTTP = _HTTP or HTTP
-    print("HTTP wrapped, original function at '_G._HTTP'")
+    print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
         local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest(req.method, req.url, stack[3], isAllowed )
+        logRequest( req.method, req.url, stack[3], isAllowed )
         local onFailure = req.failed
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -36,7 +36,7 @@ end
 
 local function wrapFetch()
     _http_Fetch = _http_Fetch or http.Fetch
-    print("http.Fetch wrapped, original function at '_http_Fetch'")
+    print( "http.Fetch wrapped, original function at '_http_Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
         local isAllowed = CFCHTTP.isAllowed( url )
@@ -53,7 +53,7 @@ end
 
 local function wrapPost()
     _http_Post = _http_Post or http.Post
-    print("http.Post wrapped, original function at '_http_Post'")
+    print( "http.Post wrapped, original function at '_http_Post'" )
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
         local isAllowed = CFCHTTP.isAllowed( url )
@@ -71,11 +71,11 @@ end
 local function wrapPlayURL()
     local BASS_ERROR_ILLPARAM = 20
     _sound_PlayURL = _sound_PlayURL or sound.PlayURL
-    print("sound.PlayURL wrapped, original function at _sound_PlayUrl")
+    print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
 
     sound.PlayURL = function( url, flags, callback )
         local isAllowed = CFCHTTP.isAllowed( url )
-        local stack = string.Split(debug.traceback(), "\n")
+        local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed )
         if not isAllowed then
             if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end

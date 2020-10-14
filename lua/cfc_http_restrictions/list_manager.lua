@@ -1,6 +1,14 @@
 CFCHTTP = CFCHTTP or {}
 
-CFCHTTP.allowedAddresses = {}
+CFCHTTP.alwaysAllowed = {
+    ["*cfcservers.org"] = true,
+    ["google.com"] = true,
+}
+
+CFCHTTP.allowedAddresses = {
+    ["youtube.com"] = true,
+    ["youtu.be"] = true,
+}
 
 local function getAddress( url )
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
@@ -41,24 +49,46 @@ function CFCHTTP.isAllowed( url )
 end
 
 function CFCHTTP.allowAddress( addr )
+    if CFCHTTP.alwaysAllowed[addr] ~= nil then
+         notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+        return false
+    end
+
     CFCHTTP.allowedAddresses[addr] = true
+    return true
 end
 
 function CFCHTTP.blockAddress( addr )
+    if CFCHTTP.alwaysAllowed[addr] ~= nil then
+        notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+        return false
+    end
+
     CFCHTTP.allowedAddresses[addr] = false
+    return true
 end
 
 function CFCHTTP.removeAddress( addr )
+    if CFCHTTP.alwaysAllowed[addr] ~= nil then
+         notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+        return false
+    end
+
     CFCHTTP.allowedAddresses[addr] = nil
+    return true
 end
 
 function CFCHTTP.saveList()
     file.CreateDir( "cfc" )
     file.Write( "cfc/http_whitelist.json", util.TableToJSON( CFCHTTP.allowedAddresses ) )
+
+    notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
 end
 
 function CFCHTTP.readList()
-    CFCHTTP.allowedAddresses = util.JSONToTable( file.Read( "cfc/http_whitelist.json" ) or "{}" ) or {}
+    CFCHTTP.allowedAddresses = util.JSONToTable( file.Read( "cfc/http_whitelist.json" ) or "" ) or CFCHTTP.allowedAddresses
+
+    table.Merge( CFCHTTP.allowedAddresses, CFCHTTP.alwaysAllowed )
 end
 
 CFCHTTP.readList()

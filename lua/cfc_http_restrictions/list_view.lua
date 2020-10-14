@@ -17,27 +17,39 @@ local function populatePanel( form )
     form:AddItem( list )
 
     for k, v in pairs( CFCHTTP.allowedAddresses ) do
-        list:AddLine(k, v and "yes" or "no" )
+        list:AddLine( k, v and "yes" or "no" )
     end
 
     local textEntry, _ = form:TextEntry( "Address" )
 
+
+    list.OnRowSelected = function( self, index, pnl )
+        textEntry:SetValue( pnl:GetColumnText( 1 ) )
+    end
+
     local allow = form:Button("Allow")
     allow.DoClick = function()
         local v = textEntry:GetValue()
+        if not CFCHTTP.allowAddress( v ) then return end
         removeByValue( list, v )
 
-        CFCHTTP.allowAddress( v )
-        list:AddLine(v, "yes")
+        list:AddLine( v, "yes" )
     end
 
     local block = form:Button("Block")
     block.DoClick = function()
         local v = textEntry:GetValue()
+        if not CFCHTTP.blockAddress( v ) then return end
         removeByValue( list, v )
 
-        CFCHTTP.blockAddress( v )
-        list:AddLine(v, "no")
+        list:AddLine( v, "no" )
+    end
+
+    local save = form:Button("Remove")
+    save.DoClick = function()
+        local v = textEntry:GetValue()
+        if not CFCHTTP.removeAddress( v ) then return end
+        removeByValue( list, v )
     end
 
     local save = form:Button("Save")
