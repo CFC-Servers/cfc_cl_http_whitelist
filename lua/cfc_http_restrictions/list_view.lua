@@ -45,8 +45,8 @@ local function populatePanel( form )
         list:AddLine( v, "no" )
     end
 
-    local save = form:Button("Remove")
-    save.DoClick = function()
+    local remove = form:Button("Remove")
+    remove.DoClick = function()
         local v = textEntry:GetValue()
         if not CFCHTTP.removeAddress( v ) then return end
         removeByValue( list, v )
