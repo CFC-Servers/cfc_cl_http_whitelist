@@ -81,7 +81,7 @@ local function wrapPlayURL()
             if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
             return
         end
-        sound.PlayURL( url, flags, callback )
+        _sound_PlayURL( url, flags, callback )
     end
 end
 

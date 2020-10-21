@@ -1,18 +1,15 @@
 CFCHTTP = CFCHTTP or {}
-
-CFCHTTP.alwaysAllowed = {
-    ["*cfcservers.org"] = true,
-    ["google.com"] = true,
-}
-
 CFCHTTP.allowedAddresses = {
-    ["youtube.com"] = true,
-    ["youtu.be"] = true,
+    ["youtube.com"] = {allowed=true},
+    ["youtu.be"] = {allowed=true},
+    ["*cfcservers.org"] = {allowed=true, isPermanent=true},
+    ["google.com"] = {allowed=true, isPermanent=true},
 }
+
 
 local function getAddress( url )
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
-    local  _,  _, protocol, addr, port  = string.find( url, pattern )
+    local  _,  _, protocol, addr, port = string.find( url, pattern )
     return addr
 end
 
@@ -23,7 +20,7 @@ local function escapeAddr( addr )
 
     local split = string.Split( addr, "*" )
     for i=1, #split do
-        split[i] = string.PatternSafe(split[i])
+        split[i] = string.PatternSafe( split[i] )
     end
 
     escaped[addr] = table.concat( split, ".*" )
@@ -36,41 +33,53 @@ function CFCHTTP.isAllowed( url )
     local address = getAddress( url )
     if not address then return end
 
-    if CFCHTTP.allowedAddresses[address] then
-        return CFCHTTP.allowedAddresses[address]
+    local allowedEntry = CFCHTTP.allowedAddresses[address]
+    if allowedEntry and allowedEntry.allowed and not allowedEntry.isPattern then
+        return allowedEntry.allowed
     end
 
-    for allowed, isAllowed in pairs( CFCHTTP.allowedAddresses ) do
-        local allowed = escapeAddr( allowed )
-        if string.match( address, allowed ) then
-            return isAllowed
+    for allowedAddr, allowedEntry in pairs( CFCHTTP.allowedAddresses ) do
+        if not allowedEntry.isPattern then
+            allowedAddr = escapeAddr( allowedAddr )
+        end
+        print(address, allowedAddr)
+        if string.match( address, allowedAddr ) then
+            return allowedEntry.allowed
         end
     end
 end
 
-function CFCHTTP.allowAddress( addr )
-    if CFCHTTP.alwaysAllowed[addr] ~= nil then
-         notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
-        return false
-    end
-
-    CFCHTTP.allowedAddresses[addr] = true
-    return true
-end
-
-function CFCHTTP.blockAddress( addr )
-    if CFCHTTP.alwaysAllowed[addr] ~= nil then
+function CFCHTTP.allowAddress( addr, isPattern, isPermanent )
+    if CFCHTTP.allowedAddresses[addr] ~= nil and CFCHTTP.allowedAddresses[addr].isPermanent then
         notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
         return false
     end
 
-    CFCHTTP.allowedAddresses[addr] = false
+    CFCHTTP.allowedAddresses[addr] = {
+        allowed=true,
+        isPattern=isPattern,
+        isPermanent=isPermanent
+    }
+    return true
+end
+
+function CFCHTTP.blockAddress( addr )
+   if CFCHTTP.allowedAddresses[addr] ~= nil and CFCHTTP.allowedAddresses[addr].isPermanent then
+        notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+        return false
+    end
+
+    CFCHTTP.allowedAddresses[addr] = {
+        allowed=false,
+        isPattern=isPattern,
+        isPermanent=isPermanent
+    }
     return true
 end
 
 function CFCHTTP.removeAddress( addr )
-    if CFCHTTP.alwaysAllowed[addr] ~= nil then
-         notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+    if CFCHTTP.allowedAddresses[addr] ~= nil and CFCHTTP.allowedAddresses[addr].isPermanent then
+        notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
         return false
     end
 
@@ -87,8 +96,6 @@ end
 
 function CFCHTTP.readList()
     CFCHTTP.allowedAddresses = util.JSONToTable( file.Read( "cfc/http_whitelist.json" ) or "" ) or CFCHTTP.allowedAddresses
-
-    table.Merge( CFCHTTP.allowedAddresses, CFCHTTP.alwaysAllowed )
 end
 
 CFCHTTP.readList()
