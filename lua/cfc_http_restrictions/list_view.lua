@@ -12,6 +12,9 @@ local function populatePanel( form )
     warning:SetText( "Adding a domain here could expose your ip to other players (and other vulnerabilities)" )
     warning:SetColor( Color(255, 0, 0) )
     warning:SetFont("GModToolHelp")
+    warning:SetWrap( true )
+    warning:SetSize(300, 100)
+
     form:AddItem( warning )
 
     local list = vgui.Create( "DListView")
