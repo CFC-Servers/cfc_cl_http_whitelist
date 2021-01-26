@@ -7,7 +7,13 @@ local function removeByValue( listView, value )
     end
 end
 
-local function populatePanel( form )
+local function populatePanel( form ) 
+    local warning = vgui.Create( "DLabel"  )
+    warning:SetText( "Adding a domain here could expose your ip to other players (and other vulnerabilities)" )
+    warning:SetColor( Color(255, 0, 0) )
+    warning:SetFont("GModToolHelp")
+    form:AddItem( warning )
+
     local list = vgui.Create( "DListView")
     list:Dock( TOP )
     list:SetMultiSelect( false )
