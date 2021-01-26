@@ -1,5 +1,5 @@
 local function removeByValue( listView, value )
-    for i, line in ipairs( listView:GetLines() ) do
+    for i, line in pairs( listView:GetLines() ) do
         if line:GetValue( 1 ) == value then
             listView:RemoveLine( i )
             return

@@ -2,7 +2,7 @@ CFCHTTP = CFCHTTP or {}
 CFCHTTP.allowedAddresses = {
     -- dropbox
     ["dl.dropboxusercontent.com"] = {allowed=true},
-    ["dl.dropbox.com"] = {allowed=true}
+    ["dl.dropbox.com"] = {allowed=true},
     ["www.dropbox.com"] = {allowed=true},
 
     ["onedrive.live.com"] = {allowed=true},
@@ -47,8 +47,8 @@ CFCHTTP.allowedAddresses = {
     ["translate.google.com"] = {allowed=true},
     ["api.foxorsomething.net"] = {allowed=true},
 
-    ["[cdn[%w-_]*.discordapp%.com/(.+)]"] = {allowed=true, isPattern=true},
-    ["mages-([%w%-]+)%.discordapp%.net/external/(.+)"] = {allowed=true, isPattern=true},
+    ["cdn[%w-_]*.discordapp%.com/(.+)"] = {allowed=true, isPattern=true},
+    ["images-([%w%-]+)%.discordapp%.net/external/(.+)"] = {allowed=true, isPattern=true},
     ["i([%w-_]+)%.tinypic%.com/(.+)"] = {allowed=true, isPattern=true},
 
 
