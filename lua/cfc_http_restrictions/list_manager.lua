@@ -1,8 +1,59 @@
 CFCHTTP = CFCHTTP or {}
 CFCHTTP.allowedAddresses = {
+    -- dropbox
+    ["dl.dropboxusercontent.com"] = {allowed=true},
+    ["dl.dropbox.com"] = {allowed=true}
+    ["www.dropbox.com"] = {allowed=true},
+
+    ["onedrive.live.com"] = {allowed=true},
+
+    -- google drive
+    ["docs.google.com"] = {allowed=true},
+    ["drive.google.com"] = {allowed=true},
+
+    -- youtube
     ["youtube.com"] = {allowed=true},
     ["youtu.be"] = {allowed=true},
-    ["*cfcservers.org"] = {allowed=true, isPermanent=true},
+
+    ["raw.githubusercontent.com"] = {allowed=true},
+    ["gist.githubusercontent.com"] = {allowed=true},
+
+    ["gitlab.com"] = {allowed=true},
+
+    ["bitbucket.org"] = {allowed=true},
+
+    ["u.teknik.io"] = {allowed=true},
+
+    ["i.imgur.com"] = {allowed=true},
+
+    ["pastebin.com"] = {allowed=true},
+
+    ["p.teknik.io"] = {allowed=true},
+
+    ["paste.ee"] = {allowed=true},
+
+    ["hastebin.com"] = {allowed=true},
+
+    ["puu.sh"] = {allowed=true},
+
+    ["images.akamai.steamusercontent.com"] = {allowed=true},
+
+    ["steamcdn-a.akamaihd.net"] = {allowed=true},
+
+    ["i.redditmedia.com"] = {allowed=true},
+    ["i.redd.it"] = {allowed=true},
+    ["api.wolframalpha.com"] = {allowed=true},
+    ["text-to-speech-demo.ng.bluemix.net"] = {allowed=true},
+    ["translate.google.com"] = {allowed=true},
+    ["api.foxorsomething.net"] = {allowed=true},
+
+    ["[cdn[%w-_]*.discordapp%.com/(.+)]"] = {allowed=true, fullPattern=true},
+    ["mages-([%w%-]+)%.discordapp%.net/external/(.+)"] = {allowed=true, fullPattern=true},
+    ["i([%w-_]+)%.tinypic%.com/(.+)"] = {allowed=true, fullPattern=true},
+
+
+    ["*.cfcservers.org"] = {allowed=true, isPermanent=true},
+    ["cfcservers.org"] = {allowed=true, isPermanent=true},
     ["google.com"] = {allowed=true, isPermanent=true},
 }
 
