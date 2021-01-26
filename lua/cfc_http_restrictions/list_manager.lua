@@ -47,9 +47,9 @@ CFCHTTP.allowedAddresses = {
     ["translate.google.com"] = {allowed=true},
     ["api.foxorsomething.net"] = {allowed=true},
 
-    ["[cdn[%w-_]*.discordapp%.com/(.+)]"] = {allowed=true, fullPattern=true},
-    ["mages-([%w%-]+)%.discordapp%.net/external/(.+)"] = {allowed=true, fullPattern=true},
-    ["i([%w-_]+)%.tinypic%.com/(.+)"] = {allowed=true, fullPattern=true},
+    ["[cdn[%w-_]*.discordapp%.com/(.+)]"] = {allowed=true, isPattern=true},
+    ["mages-([%w%-]+)%.discordapp%.net/external/(.+)"] = {allowed=true, isPattern=true},
+    ["i([%w-_]+)%.tinypic%.com/(.+)"] = {allowed=true, isPattern=true},
 
 
     ["*.cfcservers.org"] = {allowed=true, isPermanent=true},
@@ -93,7 +93,7 @@ function CFCHTTP.isAllowed( url )
         if not allowedEntry.isPattern then
             allowedAddr = escapeAddr( allowedAddr )
         end
-        print(address, allowedAddr)
+
         if string.match( address, allowedAddr ) then
             return allowedEntry.allowed
         end
