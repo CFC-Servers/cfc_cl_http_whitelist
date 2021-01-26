@@ -1,5 +1,10 @@
 CFCHTTP = CFCHTTP or {}
 CFCHTTP.allowedAddresses = {
+    ["steamcommunity.com"] = {allowed=true},
+    ["api.github.com"] = {allowed=true},
+    ["github.com"] = {allowed=true},
+    ["thegrb93.github.io"] = {allowed=true},
+
     -- dropbox
     ["dl.dropboxusercontent.com"] = {allowed=true},
     ["dl.dropbox.com"] = {allowed=true},

@@ -22,7 +22,7 @@ local function wrapHTTP()
     print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
-        local isAllowed = CFCHTTP.isAllowed( url )
+        local isAllowed = CFCHTTP.isAllowed( req.url )
         local stack = string.Split(debug.traceback(), "\n")
         logRequest( req.method, req.url, stack[3], isAllowed )
         local onFailure = req.failed
