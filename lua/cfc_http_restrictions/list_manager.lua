@@ -55,6 +55,7 @@ CFCHTTP.allowedAddresses = {
     ["*.cfcservers.org"] = {allowed=true, isPermanent=true},
     ["cfcservers.org"] = {allowed=true, isPermanent=true},
     ["google.com"] = {allowed=true, isPermanent=true},
+    ["www.google.com"] = {allowed=true, isPermanent=true},
 }
 
 
@@ -93,8 +94,8 @@ function CFCHTTP.isAllowed( url )
         if not allowedEntry.isPattern then
             allowedAddr = escapeAddr( allowedAddr )
         end
-
-        if string.match( address, allowedAddr ) then
+    
+        if string.match( address, "^"..allowedAddr.."$" ) then
             return allowedEntry.allowed
         end
     end
