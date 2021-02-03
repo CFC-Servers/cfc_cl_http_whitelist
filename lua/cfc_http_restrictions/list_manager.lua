@@ -1,4 +1,5 @@
 CFCHTTP = CFCHTTP or {}
+
 CFCHTTP.allowedAddresses = {
     ["steamcommunity.com"] = {allowed=true},
     ["api.github.com"] = {allowed=true},
@@ -63,6 +64,21 @@ CFCHTTP.allowedAddresses = {
     ["www.google.com"] = {allowed=true, isPermanent=true},
 }
 
+CFCHTTP.AddressCache = {
+    cache = {},
+
+    get = function( self, address )
+        return self.cache[address]
+    end,
+
+    set = function( self, address, isAllowed )
+        self.cache[address] = isAllowed
+    end,
+
+    invalidate = function( self )
+        self.cache = {}
+    end
+}
 
 local function getAddress( url )
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
@@ -84,7 +100,7 @@ local function escapeAddr( addr )
     return escaped[addr]
 end
 
-function CFCHTTP.isAllowed( url )
+function CFCHTTP.checkAllowed( url )
     if not url then return end
 
     local address = getAddress( url )
@@ -99,11 +115,21 @@ function CFCHTTP.isAllowed( url )
         if not allowedEntry.isPattern then
             allowedAddr = escapeAddr( allowedAddr )
         end
-    
+
         if string.match( address, "^"..allowedAddr.."$" ) then
             return allowedEntry.allowed
         end
     end
+end
+
+function CFCHTTP.isAllowed( url )
+    local cached = CFCHTTP.AddressCache:get( url )
+    if cached ~= nil then return cached end
+
+    local isAllowed = CFCHTTP.checkAllowed( url )
+    CFCHTTP.AddressCache:set( url, isAllowed )
+
+    return isAllowed
 end
 
 function CFCHTTP.allowAddress( addr, isPattern, isPermanent )
@@ -117,6 +143,9 @@ function CFCHTTP.allowAddress( addr, isPattern, isPermanent )
         isPattern=isPattern,
         isPermanent=isPermanent
     }
+
+    CFCHTTP.AddressCache:invalidate()
+
     return true
 end
 
@@ -131,6 +160,9 @@ function CFCHTTP.blockAddress( addr )
         isPattern=isPattern,
         isPermanent=isPermanent
     }
+
+    CFCHTTP.AddressCache:invalidate()
+
     return true
 end
 
@@ -141,6 +173,8 @@ function CFCHTTP.removeAddress( addr )
     end
 
     CFCHTTP.allowedAddresses[addr] = nil
+    CFCHTTP.AddressCache:invalidate()
+
     return true
 end
 
