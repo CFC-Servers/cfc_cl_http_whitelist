@@ -64,21 +64,7 @@ CFCHTTP.allowedAddresses = {
     ["www.google.com"] = {allowed=true, isPermanent=true},
 }
 
-CFCHTTP.AddressCache = {
-    cache = {},
-
-    get = function( self, address )
-        return self.cache[address]
-    end,
-
-    set = function( self, address, isAllowed )
-        self.cache[address] = isAllowed
-    end,
-
-    invalidate = function( self )
-        self.cache = {}
-    end
-}
+CFCHTTP.AddressCache = {}
 
 local function getAddress( url )
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
@@ -123,11 +109,11 @@ function CFCHTTP.checkAllowed( url )
 end
 
 function CFCHTTP.isAllowed( url )
-    local cached = CFCHTTP.AddressCache:get( url )
+    local cached = CFCHTTP.AddressCache[url]
     if cached ~= nil then return cached end
 
     local isAllowed = CFCHTTP.checkAllowed( url )
-    CFCHTTP.AddressCache:set( url, isAllowed )
+    CFCHTTP.AddressCache[url] = isAllowed
 
     return isAllowed
 end
@@ -144,7 +130,7 @@ function CFCHTTP.allowAddress( addr, isPattern, isPermanent )
         isPermanent=isPermanent
     }
 
-    CFCHTTP.AddressCache:invalidate()
+    CFCHTTP.AddressCache = {}
 
     return true
 end
@@ -161,7 +147,7 @@ function CFCHTTP.blockAddress( addr )
         isPermanent=isPermanent
     }
 
-    CFCHTTP.AddressCache:invalidate()
+    CFCHTTP.AddressCache = {}
 
     return true
 end
@@ -173,7 +159,7 @@ function CFCHTTP.removeAddress( addr )
     end
 
     CFCHTTP.allowedAddresses[addr] = nil
-    CFCHTTP.AddressCache:invalidate()
+    CFCHTTP.AddressCache = {}
 
     return true
 end
