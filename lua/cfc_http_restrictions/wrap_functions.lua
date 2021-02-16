@@ -1,11 +1,18 @@
+local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
+local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
+
 local function logRequest( method, url, fileLocation, allowed )
     local blockedColor, blockedText
     if allowed then
-        blockedText = "ALLOWED"
-        blockedColor = Color(0, 255, 0)
+        if shouldLogAllows:GetInt() == 1 then
+            blockedText = "ALLOWED"
+            blockedColor = Color(0, 255, 0)
+        end
     else
-        blockedText = "BLOCKED"
-        blockedColor = Color(255, 0, 0)
+        if shouldLogBlocks:GetInt() == 1 then
+            blockedText = "BLOCKED"
+            blockedColor = Color(255, 0, 0)
+        end
     end
     MsgC(
         blockedColor, blockedText,
