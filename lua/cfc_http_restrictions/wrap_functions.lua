@@ -2,33 +2,27 @@ local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCV
 local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
 
 local function logRequest( method, url, fileLocation, allowed )
+    if allowed and shouldLogAllows:GetInt() == 0 then return end
+    if shouldLogBlocks:GetInt() == 0 then return end
+
     local blockedColor, blockedText
-    local shouldLog = false
 
     if allowed then
-        if shouldLogAllows:GetInt() == 1 then
-            shouldLog = true
-            blockedText = "ALLOWED"
-            blockedColor = Color(0, 255, 0)
-        end
+        blockedText = "ALLOWED"
+        blockedColor = Color(0, 255, 0)
     else
-        if shouldLogBlocks:GetInt() == 1 then
-            shouldLog = true
-            blockedText = "BLOCKED"
-            blockedColor = Color(255, 0, 0)
-        end
+        blockedText = "BLOCKED"
+        blockedColor = Color(255, 0, 0)
     end
 
-    if shouldLog then
-        MsgC(
-            blockedColor, blockedText,
-            Color(136, 151, 158), ": ",
-            Color(235, 226, 52), method,
-            Color(136, 151, 158), " - ",
-            Color(235, 226, 52), url,
-            Color(235, 226, 52), "\n    ", fileLocation, "\n"
-        )
-    end
+    MsgC(
+        blockedColor, blockedText,
+        Color(136, 151, 158), ": ",
+        Color(235, 226, 52), method,
+        Color(136, 151, 158), " - ",
+        Color(235, 226, 52), url,
+        Color(235, 226, 52), "\n    ", fileLocation, "\n"
+    )
 end
 
 local function wrapHTTP()
