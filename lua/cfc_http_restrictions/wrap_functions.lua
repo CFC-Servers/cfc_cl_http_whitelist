@@ -2,6 +2,7 @@ local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCV
 local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
 local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", 0, FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
 local getAddress = CFCHTTP.getAddress
+local noisyDomains = CFCHTTP.noisyDomains
 
 local COLORS = {
     RED = Color( 255, 0, 0 ),
@@ -14,38 +15,28 @@ local function logRequest( method, url, fileLocation, allowed )
     if allowed and not shouldLogAllows:GetBool() then return end
     if not shouldLogBlocks:GetBool() then return end
 
-    local requestColor, requestStatus
-
-    if allowed then
-        requestStatus = "ALLOWED"
-        requestColor = COLORS.GREEN
-    else
-        requestStatus = "BLOCKED"
-        requestColor = COLORS.RED
-    end
-
     local isVerbose = verboseLogging:GetBool()
+    local requestStatus = allowed and "ALLOWED" or "BLOCKED"
+    local requestColor = allowed and COLORS.GREEN or COLORS.RED
 
     if isVerbose == false then
-        address = getAddress( url )
-
-        if CFCHTTP.noisyDomains[address] then
-            return
-        end
+        local address = getAddress( url )
+        if noisyDomains[address] then return end
 
         url = address
     end
-
-    local formattedLocation = isVerbose and fileLocation .. "\n" or ""
 
     MsgC(
         requestColor, requestStatus,
         COLORS.GREY, ": ",
         COLORS.YELLOW, method,
         COLORS.GREY, " - ",
-        COLORS.YELLOW, url, "\n",
-        COLORS.YELLOW, "    ", formattedLocation
+        COLORS.YELLOW, url, "\n"
     )
+
+    if isVerbose then
+        MsgC( COLORS.YELLOW, "    ", fileLocation, "\n" )
+    end
 end
 
 local function wrapHTTP()
