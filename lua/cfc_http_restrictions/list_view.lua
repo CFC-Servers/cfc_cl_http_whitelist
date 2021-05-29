@@ -19,6 +19,7 @@ local function populatePanel( form )
 
     form:CheckBox( "Log allowed requests", "cfc_http_restrictions_log_allows" )
     form:CheckBox( "Log blocked requests", "cfc_http_restrictions_log_blocks" )
+    form:CheckBox( "Detailed logging", "cfc_http_restrictions_log_verbose" )
 
     local list = vgui.Create( "DListView")
     list:Dock( TOP )

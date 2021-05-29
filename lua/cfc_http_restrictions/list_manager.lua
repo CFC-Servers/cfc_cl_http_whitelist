@@ -1,5 +1,13 @@
 CFCHTTP = CFCHTTP or {}
 
+CFCHTTP.noisyDomains = {
+    ["nanny.cfcservers.org"] = true,
+    ["google.com"] = true,
+    ["www.google.com"] = true,
+    ["cdn.cfcservers.org"] = true,
+    ["api.mixpanel.com"] = true
+}
+
 CFCHTTP.allowedAddresses = {
     ["steamcommunity.com"] = {allowed=true},
     ["api.github.com"] = {allowed=true},
@@ -64,11 +72,17 @@ CFCHTTP.allowedAddresses = {
     ["www.google.com"] = {allowed=true, isPermanent=true},
 }
 
-CFCHTTP.AddressCache = {}
+AddressCache = {}
+ParsedAddressCache = {}
 
-local function getAddress( url )
+function CFCHTTP.getAddress( url )
+    local cached = ParsedAddressCache[url]
+    if cached then return cached end
+
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
     local  _,  _, protocol, addr, port = string.find( url, pattern )
+    ParsedAddressCache[url] = addr
+
     return addr
 end
 
@@ -89,7 +103,7 @@ end
 function CFCHTTP.checkAllowed( url )
     if not url then return end
 
-    local address = getAddress( url )
+    local address = CFCHTTP.getAddress( url )
     if not address then return end
 
     local allowedEntry = CFCHTTP.allowedAddresses[address]
@@ -109,11 +123,11 @@ function CFCHTTP.checkAllowed( url )
 end
 
 function CFCHTTP.isAllowed( url )
-    local cached = CFCHTTP.AddressCache[url]
+    local cached = AddressCache[url]
     if cached ~= nil then return cached end
 
     local isAllowed = CFCHTTP.checkAllowed( url )
-    CFCHTTP.AddressCache[url] = isAllowed
+    AddressCache[url] = isAllowed
 
     return isAllowed
 end
@@ -130,7 +144,7 @@ function CFCHTTP.allowAddress( addr, isPattern, isPermanent )
         isPermanent=isPermanent
     }
 
-    CFCHTTP.AddressCache = {}
+    AddressCache = {}
 
     return true
 end
@@ -147,7 +161,7 @@ function CFCHTTP.blockAddress( addr )
         isPermanent=isPermanent
     }
 
-    CFCHTTP.AddressCache = {}
+    AddressCache = {}
 
     return true
 end
@@ -159,7 +173,7 @@ function CFCHTTP.removeAddress( addr )
     end
 
     CFCHTTP.allowedAddresses[addr] = nil
-    CFCHTTP.AddressCache = {}
+    AddressCache = {}
 
     return true
 end
