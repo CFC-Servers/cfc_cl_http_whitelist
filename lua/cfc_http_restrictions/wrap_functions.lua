@@ -1,27 +1,50 @@
 local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
 local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
+local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", 0, FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
+local getAddress = CFCHTTP.getAddress
+
+local COLORS = {
+    RED = Color( 255, 0, 0 ),
+    GREEN = Color( 0, 255, 0 ),
+    GREY = Color( 136, 151, 158 ),
+    YELLOW = Color( 235, 226, 52 )
+}
 
 local function logRequest( method, url, fileLocation, allowed )
-    if allowed and shouldLogAllows:GetInt() == 0 then return end
-    if shouldLogBlocks:GetInt() == 0 then return end
+    if allowed and not shouldLogAllows:GetBool() then return end
+    if not shouldLogBlocks:GetBool() then return end
 
-    local blockedColor, blockedText
+    local requestColor, requestStatus
 
     if allowed then
-        blockedText = "ALLOWED"
-        blockedColor = Color(0, 255, 0)
+        requestStatus = "ALLOWED"
+        requestColor = COLORS.GREEN
     else
-        blockedText = "BLOCKED"
-        blockedColor = Color(255, 0, 0)
+        requestStatus = "BLOCKED"
+        requestColor = COLORS.RED
     end
 
+    local isVerbose = verboseLogging:GetBool()
+
+    if isVerbose == false then
+        address = getAddress( url )
+
+        if CFCHTTP.noisyDomains[address] then
+            return
+        end
+
+        url = address
+    end
+
+    local formattedLocation = isVerbose and fileLocation .. "\n" or ""
+
     MsgC(
-        blockedColor, blockedText,
-        Color(136, 151, 158), ": ",
-        Color(235, 226, 52), method,
-        Color(136, 151, 158), " - ",
-        Color(235, 226, 52), url,
-        Color(235, 226, 52), "\n    ", fileLocation, "\n"
+        requestColor, requestStatus,
+        COLORS.GREY, ": ",
+        COLORS.YELLOW, method,
+        COLORS.GREY, " - ",
+        COLORS.YELLOW, url, "\n",
+        COLORS.YELLOW, "    ", formattedLocation
     )
 end
 
