@@ -70,6 +70,9 @@ CFCHTTP.allowedAddresses = {
     ["cfcservers.org"] = {allowed=true, isPermanent=true},
     ["google.com"] = {allowed=true, isPermanent=true},
     ["www.google.com"] = {allowed=true, isPermanent=true},
+
+    -- dectalk
+    ["tts.cyzon.us"] = {allowed=true},
 }
 
 AddressCache = {}
