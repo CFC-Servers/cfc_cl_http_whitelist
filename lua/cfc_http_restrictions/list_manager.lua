@@ -66,6 +66,7 @@ CFCHTTP.allowedAddresses = {
     ["i([%w-_]+)%.tinypic%.com"] = {allowed=true, isPattern=true},
 
 
+    ["api.mixpanel.com"] = {allowed=true},
     ["*.cfcservers.org"] = {allowed=true, isPermanent=true},
     ["cfcservers.org"] = {allowed=true, isPermanent=true},
     ["google.com"] = {allowed=true, isPermanent=true},
