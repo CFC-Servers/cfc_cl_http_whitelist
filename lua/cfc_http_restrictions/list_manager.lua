@@ -47,6 +47,7 @@ CFCHTTP.allowedAddresses = {
     ["paste.ee"] = {allowed=true},
 
     ["hastebin.com"] = {allowed=true},
+    ["hastebin.nl"] = {allowed=true},
 
     ["puu.sh"] = {allowed=true},
 
