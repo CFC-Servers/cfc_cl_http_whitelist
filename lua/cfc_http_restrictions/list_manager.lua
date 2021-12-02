@@ -5,7 +5,8 @@ CFCHTTP.noisyDomains = {
     ["google.com"] = true,
     ["www.google.com"] = true,
     ["cdn.cfcservers.org"] = true,
-    ["api.mixpanel.com"] = true
+    ["api.mixpanel.com"] = true,
+    ["paste.cfcservers.org"] = true
 }
 
 CFCHTTP.allowedAddresses = {
