@@ -57,54 +57,80 @@ local function wrapHTTP()
 end
 
 local function wrapFetch()
-    _http_Fetch = _http_Fetch or http.Fetch
-    print( "http.Fetch wrapped, original function at '_http_Fetch'" )
+    http._Fetch = _http._Fetch or http.Fetch
+    print( "http.Fetch wrapped, original function at 'http._Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
         local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
+
         logRequest( "GET", url, stack[3], isAllowed )
+
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
         end
 
-        _http_Fetch( url, onSuccess, onFailure, headers )
+        return http._Fetch( url, onSuccess, onFailure, headers )
     end
 end
 
 local function wrapPost()
-    _http_Post = _http_Post or http.Post
-    print( "http.Post wrapped, original function at '_http_Post'" )
+    http._Post = http._Post or http.Post
+    print( "http.Post wrapped, original function at 'http._Post'" )
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
         local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split(debug.traceback(), "\n")
+
         logRequest( "POST", url, stack[3], isAllowed )
+
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
         end
 
-        _http_Post( url, params, onSuccess, onFailure, headers )
+        return http._Post( url, params, onSuccess, onFailure, headers )
     end
 end
 
 local function wrapPlayURL()
     local BASS_ERROR_ILLPARAM = 20
-    _sound_PlayURL = _sound_PlayURL or sound.PlayURL
-    print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
+    sound._PlayURL = sound._PlayURL or sound.PlayURL
+    print( "sound.PlayURL wrapped, original function at sound._PlayUrl" )
 
     sound.PlayURL = function( url, flags, callback )
         local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split( debug.traceback(), "\n" )
+
         logRequest( "GET", url, stack[3], isAllowed )
+
         if not isAllowed then
             if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
+
             return
         end
-        _sound_PlayURL( url, flags, callback )
+
+        return sound._PlayURL( url, flags, callback )
     end
+end
+
+local function wrapGUIOpenURL()
+    gui._OpenURL = gui._OpenURL or gui.OpenURL
+    print( "gui.OpenURL wrapped, original function at gui._OpenURL" )
+
+    gui.OpenURL = function( url )
+        local isAllowed = CFCHTTP.isAllowed( url )
+        local stack = string.Split( debug.traceback(), "\n" )
+
+        logRequest( "GET", url, stack[3], isAllowed )
+        if not isAllowed then return end
+
+        return gui._OpenURL( url )
+    end
+end
+
+local function wrapPanelOpenURL()
 end
 
 wrapHTTP()
