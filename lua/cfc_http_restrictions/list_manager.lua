@@ -20,7 +20,9 @@ CFCHTTP.allowedAddresses = {
     ["dl.dropbox.com"] = {allowed=true},
     ["www.dropbox.com"] = {allowed=true},
 
+    -- onedrive
     ["onedrive.live.com"] = {allowed=true},
+    ["api.onedrive.com"] = {allowed=true},
 
     -- google drive
     ["docs.google.com"] = {allowed=true},
