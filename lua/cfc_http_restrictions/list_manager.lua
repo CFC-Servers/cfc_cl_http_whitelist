@@ -141,20 +141,20 @@ local function getUrlsInHTML( html )
     local pattern = "%a+://[%a%d%.-]+:?%d*/[a-zA-Z0-9%.]+"
     
     local urls = {}
-	for url in string.gmatch(html, pattern) do
-		table.insert(urls, url)
-	end
-	
-	return urls
+    for url in string.gmatch(html, pattern) do
+        table.insert(urls, url)
+    end
+    
+    return urls
 end
 
 function CFCHTTP.isHTMLAllowed( html )
-	local urls = getUrlsInHTML( html )
-	for _, url in pairs(urls) do
-		if not CFCHTTP.isAllowed( url ) then return false end
-	end
-	
-	return true
+    local urls = getUrlsInHTML( html )
+    for _, url in pairs(urls) do
+        if not CFCHTTP.isAllowed( url ) then return false end
+    end
+    
+    return true
 end
 
 function CFCHTTP.allowAddress( addr, isPattern, isPermanent )
