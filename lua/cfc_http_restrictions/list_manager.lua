@@ -151,10 +151,12 @@ end
 function CFCHTTP.isHTMLAllowed( html )
     local urls = getUrlsInHTML( html )
     for _, url in pairs(urls) do
-        if not CFCHTTP.isAllowed( url ) then return false end
+        if url and not CFCHTTP.isAllowed( url ) then 
+            return false, url
+         end
     end
     
-    return true
+    return true, ""
 end
 
 function CFCHTTP.allowAddress( addr, isPattern, isPermanent )

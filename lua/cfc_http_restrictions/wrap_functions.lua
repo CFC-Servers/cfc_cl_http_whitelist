@@ -117,8 +117,9 @@ local function wrapHTMLPanel(panelName)
     _G[funcName("SetHTML")] =  _G[funcName("SetHTML")] or vgui.GetControlTable(panelName).SetHTML
     _G[funcName("OpenURL")] =  _G[funcName("OpenURL")] or vgui.GetControlTable(panelName).OpenURL
     
-    vgui.GetControlTable("DMediaPlayerHTML").SetHTML = function( self, html, ... )
-        local isAllowed = CFCHTTP.isHTMLAllowed( html ) 
+    vgui.GetControlTable(panelName).SetHTML = function( self, html, ... )
+
+        local isAllowed, url = CFCHTTP.isHTMLAllowed( html ) 
 
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed )
@@ -130,7 +131,7 @@ local function wrapHTMLPanel(panelName)
         _G[funcName("SetHTML")]( self, html, ... )
     end
     
-    vgui.GetControlTable("DMediaPlayerHTML").OpenURL = function( self, url, ... )
+    vgui.GetControlTable(panelName).OpenURL = function( self, url, ... )
         local isAllowed = CFCHTTP.isAllowed( url )
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed )
