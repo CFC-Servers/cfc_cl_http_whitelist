@@ -191,7 +191,22 @@ function CFCHTTP.saveList()
 end
 
 function CFCHTTP.readList()
-    CFCHTTP.allowedAddresses = util.JSONToTable( file.Read( "cfc/http_whitelist.json" ) or "" ) or CFCHTTP.allowedAddresses
+    local fileData = file.Read( "cfc/http_whitelist.json" )
+    if not fileData then return end
+
+    local loadedWhitelist = util.JSONToTable( fileData )
+
+    for address, entryData in pairs( CFCHTTP.allowedAddresses ) do
+        if entryData.isPermanent then
+            local loaded = loadedWhitelist[address]
+
+            if not loaded or not loaded.isPermanent then
+                loadedWhitelist[address] = entryData
+            end
+        end
+    end
+
+    CFCHTTP.allowedAddresses = loadedWhitelist
 end
 
 CFCHTTP.readList()
