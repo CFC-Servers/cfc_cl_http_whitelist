@@ -198,11 +198,7 @@ function CFCHTTP.readList()
 
     for address, entryData in pairs( CFCHTTP.allowedAddresses ) do
         if entryData.isPermanent then
-            local loaded = loadedWhitelist[address]
-
-            if not loaded or not loaded.isPermanent then
-                loadedWhitelist[address] = entryData
-            end
+            loadedWhitelist[address] = entryData
         end
     end
 
