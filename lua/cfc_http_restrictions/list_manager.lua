@@ -75,6 +75,7 @@ CFCHTTP.allowedAddresses = {
     ["cfcservers.org"] = {allowed=true, isPermanent=true},
     ["google.com"] = {allowed=true, isPermanent=true},
     ["www.google.com"] = {allowed=true, isPermanent=true},
+    ["samuelmaddock.github.io"] = {allowed=true, isPermanent=true} -- Media player
 }
 
 AddressCache = {}
