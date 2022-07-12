@@ -114,11 +114,15 @@ local function wrapHTMLPanel( panelName )
         return "_"..panelName.."_"..functionName
     end
 
-    _G[funcName("SetHTML")] =  _G[funcName("SetHTML")] or vgui.GetControlTable(panelName).SetHTML
-    _G[funcName("OpenURL")] =  _G[funcName("OpenURL")] or vgui.GetControlTable(panelName).OpenURL
+    local controlTable = vgui.GetControlTable( panelName )
     
-    vgui.GetControlTable(panelName).SetHTML = function( self, html, ... )
+    local setHTML = funcName( "SetHTML" )
+    local openURL = funcName( "OpenURL" )
 
+    _G[setHTML] =  _G[setHTML] or controlTable.SetHTML
+    _G[openURL] =  _G[openURL] or controlTable.OpenURL
+    
+    controlTable.SetHTML = function( self, html, ... )
         local isAllowed, url = CFCHTTP.isHTMLAllowed( html ) 
 
         local stack = string.Split( debug.traceback(), "\n" )
@@ -128,16 +132,18 @@ local function wrapHTMLPanel( panelName )
             html = [[<h1> BLOCKED </h1>]] 
         end
     
-        _G[funcName("SetHTML")]( self, html, ... )
+        _G[setHTML]( self, html, ... )
     end
     
-    vgui.GetControlTable(panelName).OpenURL = function( self, url, ... )
+    controlTable.OpenURL = function( self, url, ... )
         local isAllowed = CFCHTTP.isAllowed( url )
+
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed )
+
         if not isAllowed then return end
 
-        _G[funcName("OpenURL")]( self, url, ... )
+        _G[openURL]( self, url, ... )
     end
     
 end
