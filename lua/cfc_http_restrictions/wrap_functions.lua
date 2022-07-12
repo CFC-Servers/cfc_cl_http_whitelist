@@ -142,9 +142,11 @@ local function wrapHTMLPanel( panelName )
     
 end
 
-wrapHTMLPanel("DHTML")
-wrapHTMLPanel("DPanel")
-wrapHTMLPanel("DMediaPlayerHTML")
+hook.Add( "Initialize", "CFC_HttpWhitelist_WrapHTML", function()
+    wrapHTMLPanel("DHTML")
+    wrapHTMLPanel("DPanel")
+    wrapHTMLPanel("DMediaPlayerHTML")
+end )
 
 wrapHTTP()
 wrapFetch()
