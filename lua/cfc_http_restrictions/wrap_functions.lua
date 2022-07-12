@@ -108,7 +108,7 @@ local function wrapPlayURL()
 end
 
 
-local function wrapHTMLPanel(panelName)
+local function wrapHTMLPanel( panelName )
     print( "wrapped SetHTML and OpenURL for "..panelName )
     local funcName = function( functionName )
         return "_"..panelName.."_"..functionName
