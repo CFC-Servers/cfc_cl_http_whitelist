@@ -109,7 +109,7 @@ end
 
 
 local function wrapHTMLPanel( panelName )
-    print( "wrapped SetHTML and OpenURL for "..panelName )
+    print( "Wrapping SetHTML and OpenURL for " .. panelName )
     local funcName = function( functionName )
         return "_"..panelName.."_"..functionName
     end
