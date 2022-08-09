@@ -57,6 +57,8 @@ CFCHTTP.allowedAddresses = {
     ["images.akamai.steamusercontent.com"] = {allowed=true},
 
     ["steamcdn-a.akamaihd.net"] = {allowed=true},
+    
+    ["facepunch.com"] = {allowed=true},
 
     ["i.redditmedia.com"] = {allowed=true},
     ["i.redd.it"] = {allowed=true},
