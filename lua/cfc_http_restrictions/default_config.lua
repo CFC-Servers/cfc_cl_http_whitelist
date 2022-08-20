@@ -2,7 +2,13 @@ AddCSLuaFile()
 
 return {
     version="1", -- this field allows backwards compatibility if the config structure is ever updated
-
+    
+    defaultAssetURIOptions = {
+        allowed=true
+    },
+    defaultOptions = {
+        allowed=false,
+    },
     addresses = {
         ["google.com"] =  {allowed=true, noisy=true},
         ["www.google.com"] = {allowed=true, noisy=true},

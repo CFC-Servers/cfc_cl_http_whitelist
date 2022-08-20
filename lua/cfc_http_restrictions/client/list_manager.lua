@@ -1,42 +1,47 @@
 CFCHTTP = CFCHTTP or {}
 
-AddressCache = {}
-ParsedAddressCache = {}
 
+local parsedAddressCache = {}
 function CFCHTTP.getAddress( url )
-    local cached = ParsedAddressCache[url]
+    local cached = parsedAddressCache[url]
     if cached then return cached end
 
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
     local  _,  _, protocol, addr, port = string.find( url, pattern )
-    ParsedAddressCache[url] = addr
+    parsedAddressCache[url] = addr
 
     return addr
 end
 
+function CFCHTTP.isAssetURI(url)
+    return string.StartWith(url, "asset://")
+end
+
 -- escapes all lua pattern characters and allows the use of * as a wildcard
-local escaped = {}
+local escapedCache = {}
 local function escapeAddr( addr )
-    if escaped[addr] then return escaped[addr] end
+    if escapedCache[addr] then return escapedCache[addr] end
 
     local split = string.Split( addr, "*" )
     for i=1, #split do
         split[i] = string.PatternSafe( split[i] )
     end
 
-    escaped[addr] = table.concat( split, ".*" )
-    return escaped[addr]
+    escapedCache[addr] = table.concat( split, ".*" )
+    return escapedCache[addr]
 end
 
-function CFCHTTP.checkAllowed( url )
+function CFCHTTP.getOptionsForURI(url)
     if not url then return end
+
+    if CFCHTTP.isAssetURI(url) then return CFCHTTP.config.defaultAssetURIConfig end
 
     local address = CFCHTTP.getAddress( url )
     if not address then return end
 
     local options = CFCHTTP.config.addresses[address]
     if options and not options.pattern then
-        return options.allowed
+        return options
     end
 
     for allowedAddr, options in pairs( CFCHTTP.config.addresses) do
@@ -45,19 +50,36 @@ function CFCHTTP.checkAllowed( url )
         end
 
         if string.match( address, "^"..allowedAddr.."$" ) then
-            return options.allowed
+            return options
         end
     end
 end
 
-function CFCHTTP.isAllowed( url )
-    local cached = AddressCache[url]
-    if cached ~= nil then return cached end
+-- TODO reimmplement caching
+function CFCHTTP.getOptionsForURI(url)
+    if not url then return CFCHTTP.config.defaultOptions end
 
-    local isAllowed = CFCHTTP.checkAllowed( url )
-    AddressCache[url] = isAllowed
+    if CFCHTTP.isAssetURI(url) then return CFCHTTP.config.defaultAssetURIOptions end
 
-    return isAllowed
+    local address = CFCHTTP.getAddress( url )
+    if not address then return CFCHTTP.config.defaultOptions end
+
+    local options = CFCHTTP.config.addresses[address]
+    if options and not options.pattern then
+        return options
+    end
+
+    for allowedAddr, options in pairs( CFCHTTP.config.addresses) do
+        if not options.pattern then
+            options = escapeAddr( allowedAddr )
+        end
+
+        if string.match( address, "^"..allowedAddr.."$" ) then
+            return options
+        end
+    end
+
+    return CFCHTTP.config.defaultOptions 
 end
 
 -- file based config functions
@@ -71,8 +93,6 @@ function CFCHTTP.allowAddress( addr )
         _edited=true,
         allowed=true,
     }
-
-    AddressCache = {}
 
     return true
 end
@@ -88,8 +108,6 @@ function CFCHTTP.blockAddress( addr )
         allowed=false,
     }
 
-    AddressCache = {}
-
     return true
 end
 
@@ -100,7 +118,6 @@ function CFCHTTP.removeAddress( addr )
     end
 
     CFCHTTP.config.addresses[addr] = nil
-    AddressCache = {}
 
     return true
 end

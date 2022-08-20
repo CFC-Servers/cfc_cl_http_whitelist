@@ -1,7 +1,9 @@
 # cfc_cl_http_whitelist
 
 ## Configuring 
-Configuration is loaded from lua files in files in the data folder on the client
+You can create files in lua/cfc_http_restrictions/configs to add your own default domains to your server
+
+Configuration is loaded from lua files and a data file on in the clients data folder
 Each config thats loaded will overwrite values in the previous config, unless permanent=true is set on that config option
 
 Configuration load order on client
