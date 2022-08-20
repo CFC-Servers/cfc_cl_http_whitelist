@@ -18,3 +18,10 @@ Configuration load order on client
 | allowed|bool| Is the domain allowed, if false block the domain, if true allow the domain |
 |permanent|bool|Is the domain permanent, if true the domain can not be removed by the users own config|
 |_edited|bool|DO NOT SET, internal field used to track if a config option has been edited by the client|
+
+#### Clientside Convars
+| name | default | description |
+| ---- | ------- | ----------- |
+| cfc_http_restrictions_log_allows | 1 | Should log allowed HTTP requests? |
+| cfc_http_restrictions_log_blocks | 1 | Should log blocked HTTP requests |
+| cfc_http_restrictions_log_verbose | 0 | Should the logs include verbose messages? noisy domains and full urls. |
