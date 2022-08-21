@@ -47,7 +47,7 @@ function CFCHTTP.getOptionsForURI(url)
 
     for allowedAddr, options in pairs( CFCHTTP.config.addresses ) do
         if not options.pattern then
-            options = escapeAddr( allowedAddr )
+            allowedAddr = escapeAddr( allowedAddr )
         end
 
         if string.match( address, "^"..allowedAddr.."$" ) then
