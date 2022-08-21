@@ -73,7 +73,10 @@ local function populatePanel( form )
                 conf.addresses[addr] = nil
             end
         end
-        CFCHTTP.saveFileConfig(conf)
+        CFCHTTP.saveFileConfig({
+            version = "1",
+            addresses = conf.addresses
+        })
     end
 end
 

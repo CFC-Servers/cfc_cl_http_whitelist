@@ -25,7 +25,10 @@ end
 
 function CFCHTTP.mergeConfigs(old, new)
     if new.version == "1" then
-        old.wrapHTMLPanels = new.wrapHTMLPanels
+        if new.wrapHTMLPanels ~= nil then old.wrapHTMLPanels = new.wrapHTMLPanels end
+        if new.defaultOptions ~= nil then old.defaultOptions = new.defaultOptions end
+        if new.defaultAssetURIOption ~= nil then old.defaultAssetURIOption = new.defaultAssetURIOption end
+        
         for domain, options in pairs(new.addresses) do
             local currentOptions = old.addresses[domain]
             if currentOptions and currentOptions.permanent then
