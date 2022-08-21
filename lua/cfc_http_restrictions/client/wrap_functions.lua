@@ -146,10 +146,12 @@ local function wrapHTMLPanel( panelName )
     end
     
     controlTable.OpenURL = function( self, url, ... )
-        local isAllowed = CFCHTTP.isAllowed( url )
+        local options = CFCHTTP.getOptionsForURI(url)
+        local isAllowed = options and options.allowed
+        local noisy = options and options.noisy
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", url, stack[3], isAllowed )
+        logRequest( "GET", url, stack[3], isAllowed, noisy )
 
         if not isAllowed then return end
 
