@@ -1,8 +1,6 @@
 local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
 local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
 local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", 0, FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
-local getAddress = CFCHTTP.getAddress
-local noisyDomains = CFCHTTP.noisyDomains
 
 local COLORS = {
     RED = Color( 255, 0, 0 ),
@@ -11,7 +9,7 @@ local COLORS = {
     YELLOW = Color( 235, 226, 52 )
 }
 
-local function logRequest( method, url, fileLocation, allowed )
+local function logRequest( method, url, fileLocation, allowed, noisy )
     if allowed and not shouldLogAllows:GetBool() then return end
     if not shouldLogBlocks:GetBool() then return end
 
@@ -20,8 +18,8 @@ local function logRequest( method, url, fileLocation, allowed )
     local requestColor = allowed and COLORS.GREEN or COLORS.RED
 
     if isVerbose == false then
-        local address = getAddress( url )
-        if noisyDomains[address] then return end
+        local address = CFCHTTP.getAddress( url )
+        if noisy then return end
 
         url = address
     end
@@ -44,9 +42,12 @@ local function wrapHTTP()
     print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
-        local isAllowed = CFCHTTP.isAllowed( req.url )
+        local options = CFCHTTP.getOptionsForURI(req.url)
+        local isAllowed = options and options.allowed
+        local noisy = options and options.noisy
+
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest( req.method, req.url, stack[3], isAllowed )
+        logRequest( req.method, req.url, stack[3], isAllowed, noisy)
         local onFailure = req.failed
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -61,9 +62,12 @@ local function wrapFetch()
     print( "http.Fetch wrapped, original function at '_http_Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
-        local isAllowed = CFCHTTP.isAllowed( url )
+        local options = CFCHTTP.getOptionsForURI(url)
+        local isAllowed = options and options.allowed
+        local noisy = options and options.noisy
+
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest( "GET", url, stack[3], isAllowed )
+        logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
@@ -78,9 +82,12 @@ local function wrapPost()
     print( "http.Post wrapped, original function at '_http_Post'" )
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
-        local isAllowed = CFCHTTP.isAllowed( url )
+        local options = CFCHTTP.getOptionsForURI(url)
+        local isAllowed = options and options.allowed
+        local noisy = options and options.noisy
+
         local stack = string.Split(debug.traceback(), "\n")
-        logRequest( "POST", url, stack[3], isAllowed )
+        logRequest( "POST", url, stack[3], isAllowed, noisy )
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
@@ -96,9 +103,12 @@ local function wrapPlayURL()
     print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
 
     sound.PlayURL = function( url, flags, callback )
-        local isAllowed = CFCHTTP.isAllowed( url )
+        local options = CFCHTTP.getOptionsForURI(url)
+        local isAllowed = options and options.allowed
+        local noisy = options and options.noisy
+
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", url, stack[3], isAllowed )
+        logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
             if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
             return
