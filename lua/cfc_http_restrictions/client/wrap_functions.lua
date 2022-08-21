@@ -161,9 +161,11 @@ local function wrapHTMLPanel( panelName )
 end
 
 hook.Add( "Initialize", "CFC_HttpWhitelist_WrapHTML", function()
-    wrapHTMLPanel("DHTML")
-    wrapHTMLPanel("DPanel")
-    wrapHTMLPanel("DMediaPlayerHTML")
+    if CFCHTTP.config.wrapHTMLPanels then
+        wrapHTMLPanel("DHTML")
+        wrapHTMLPanel("DPanel")
+        wrapHTMLPanel("DMediaPlayerHTML")
+    end
 end )
 
 wrapHTTP()
