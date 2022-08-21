@@ -31,30 +31,6 @@ local function escapeAddr( addr )
     return escapedCache[addr]
 end
 
-function CFCHTTP.getOptionsForURI(url)
-    if not url then return end
-
-    if CFCHTTP.isAssetURI(url) then return CFCHTTP.config.defaultAssetURIConfig end
-
-    local address = CFCHTTP.getAddress( url )
-    if not address then return end
-
-    local options = CFCHTTP.config.addresses[address]
-    if options and not options.pattern then
-        return options
-    end
-
-    for allowedAddr, options in pairs( CFCHTTP.config.addresses ) do
-        if not options.pattern then
-            options = escapeAddr( allowedAddr )
-        end
-
-        if string.match( address, "^"..allowedAddr.."$" ) then
-            return options
-        end
-    end
-end
-
 -- TODO reimmplement caching
 function CFCHTTP.getOptionsForURI(url)
     if not url then return CFCHTTP.config.defaultOptions end
@@ -71,7 +47,7 @@ function CFCHTTP.getOptionsForURI(url)
 
     for allowedAddr, options in pairs( CFCHTTP.config.addresses ) do
         if not options.pattern then
-            options = escapeAddr( allowedAddr )
+            allowedAddr = escapeAddr( allowedAddr )
         end
 
         if string.match( address, "^"..allowedAddr.."$" ) then
@@ -81,6 +57,31 @@ function CFCHTTP.getOptionsForURI(url)
 
     return CFCHTTP.config.defaultOptions 
 end
+
+local function getUrlsInHTML( html )
+    local pattern = "%a+://[%a%d%.-]+:?%d*/?[a-zA-Z0-9%.]*"
+
+    local urls = {}
+    for url in string.gmatch(html, pattern) do
+        table.insert(urls, url)
+    end
+
+    return urls
+end
+
+function CFCHTTP.isHTMLAllowed( html )
+    local urls = getUrlsInHTML( html )
+    for _, url in pairs(urls) do
+        local options = CFCHTTP.getOptionsForURI(url)
+        
+        if options and not options.allowed then 
+            return false, url
+        end
+    end
+
+    return true, ""
+end
+
 
 -- file based config functions
 function CFCHTTP.allowAddress( addr )

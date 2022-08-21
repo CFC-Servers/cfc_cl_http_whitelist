@@ -117,6 +117,57 @@ local function wrapPlayURL()
     end
 end
 
+
+local function wrapHTMLPanel( panelName )
+    print( "Wrapping SetHTML and OpenURL for " .. panelName )
+    local funcName = function( functionName )
+        return "_"..panelName.."_"..functionName
+    end
+
+    local controlTable = vgui.GetControlTable( panelName )
+    
+    local setHTML = funcName( "SetHTML" )
+    local openURL = funcName( "OpenURL" )
+
+    _G[setHTML] =  _G[setHTML] or controlTable.SetHTML
+    _G[openURL] =  _G[openURL] or controlTable.OpenURL
+    
+    controlTable.SetHTML = function( self, html, ... )
+        local isAllowed, url = CFCHTTP.isHTMLAllowed( html ) 
+
+        local stack = string.Split( debug.traceback(), "\n" )
+        logRequest( "GET", url, stack[3], isAllowed )
+
+        if not isAllowed then
+            html = [[<h1> BLOCKED </h1>]] 
+        end
+    
+        _G[setHTML]( self, html, ... )
+    end
+    
+    controlTable.OpenURL = function( self, url, ... )
+        local options = CFCHTTP.getOptionsForURI(url)
+        local isAllowed = options and options.allowed
+        local noisy = options and options.noisy
+
+        local stack = string.Split( debug.traceback(), "\n" )
+        logRequest( "GET", url, stack[3], isAllowed, noisy )
+
+        if not isAllowed then return end
+
+        _G[openURL]( self, url, ... )
+    end
+    
+end
+
+hook.Add( "Initialize", "CFC_HttpWhitelist_WrapHTML", function()
+    if CFCHTTP.config.wrapHTMLPanels then
+        wrapHTMLPanel("DHTML")
+        wrapHTMLPanel("DPanel")
+        wrapHTMLPanel("DMediaPlayerHTML")
+    end
+end )
+
 wrapHTTP()
 wrapFetch()
 wrapPost()
