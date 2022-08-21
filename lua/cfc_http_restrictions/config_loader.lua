@@ -15,7 +15,7 @@ end
 
 -- LoadLuaConfigs loads the default config and then any lua files in the cfc_http_restrictions/configs directory
 function CFCHTTP.loadLuaConfigs() 
-    files, _ = file.Find("cfc_http_restrictions/configs/*.lua", "LUA")
+    local files = file.Find("cfc_http_restrictions/configs/*.lua", "LUA")
     for _, file in pairs(files) do
         AddCSLuaFile("cfc_http_restrictions/configs/" .. file)
         local newConfig = include("cfc_http_restrictions/configs/" .. file)
