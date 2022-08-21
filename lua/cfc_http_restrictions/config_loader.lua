@@ -25,6 +25,7 @@ end
 
 function CFCHTTP.mergeConfigs(old, new)
     if new.version == "1" then
+        old.wrapHTMLPanels = new.wrapHTMLPanels
         for domain, options in pairs(new.addresses) do
             local currentOptions = old.addresses[domain]
             if currentOptions and currentOptions.permanent then
