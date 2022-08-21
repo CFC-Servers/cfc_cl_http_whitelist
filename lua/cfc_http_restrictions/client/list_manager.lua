@@ -69,7 +69,7 @@ function CFCHTTP.getOptionsForURI(url)
         return options
     end
 
-    for allowedAddr, options in pairs( CFCHTTP.config.addresses) do
+    for allowedAddr, options in pairs( CFCHTTP.config.addresses ) do
         if not options.pattern then
             options = escapeAddr( allowedAddr )
         end
