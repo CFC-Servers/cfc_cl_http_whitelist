@@ -30,7 +30,7 @@ local function populatePanel( form )
     form:AddItem( list )
 
     for k, v in pairs( CFCHTTP.config.addresses ) do
-        list:AddLine( k, v and "yes" or "no" )
+        list:AddLine( k, (v and v.allowed) and "yes" or "no" )
     end
 
     local textEntry, _ = form:TextEntry( "Address" )
