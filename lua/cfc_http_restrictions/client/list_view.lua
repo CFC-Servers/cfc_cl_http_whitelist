@@ -29,12 +29,11 @@ local function populatePanel( form )
     list:SetTall(300)
     form:AddItem( list )
 
-    for k, v in pairs( CFCHTTP.allowedAddresses ) do
+    for k, v in pairs( CFCHTTP.config.addresses ) do
         list:AddLine( k, v and "yes" or "no" )
     end
 
     local textEntry, _ = form:TextEntry( "Address" )
-
 
     list.OnRowSelected = function( self, index, pnl )
         textEntry:SetValue( pnl:GetColumnText( 1 ) )
@@ -58,6 +57,7 @@ local function populatePanel( form )
         list:AddLine( v, "no" )
     end
 
+    -- TODO when a config is removed we should reload the default values from the lua based configs instead of just removing it from the entire list
     local remove = form:Button("Remove")
     remove.DoClick = function()
         local v = textEntry:GetValue()
@@ -67,9 +67,14 @@ local function populatePanel( form )
 
     local save = form:Button("Save")
     save.DoClick = function()
-        CFCHTTP.saveList()
+        local conf = CFCHTTP.copyConfig(CFCHTTP.config)
+        for addr, options in pairs(conf.addresses) do
+            if not options._edited then
+                conf.addresses[addr] = nil
+            end
+        end
+        CFCHTTP.saveFileConfig(conf)
     end
-
 end
 
 hook.Add( "AddToolMenuCategories", "CFC_HTTP_ListManager", function()
