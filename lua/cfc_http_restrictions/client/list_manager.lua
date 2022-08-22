@@ -113,7 +113,7 @@ function CFCHTTP.blockAddress( addr )
 end
 
 function CFCHTTP.removeAddress( addr )
-    if CFCHTTP.adresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
+    if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
         notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
         return false
     end
