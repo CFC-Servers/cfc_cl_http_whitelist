@@ -2,7 +2,7 @@
 
 ## Configuring 
 You can create a file in `lua/cfc_http_restrictions/configs` to add your own default domains to your server.
-e.g. `lua/cfc_http_restrictions/config/myserver_config.lua`. See `lua/cfc_http_retrictions/default_config.lua` for an example.
+e.g. `lua/cfc_http_restrictions/config/myserver_config.lua`. See [CFC's Whitelist config addon](https://github.com/CFC-Servers/cfc_cl_http_whitelist_configs) for an exmaple
 
 Configuration is loaded from lua files and a data file on in the clients data folder
 Each config thats loaded will overwrite values in the previous config, unless permanent=true is set on that config option
