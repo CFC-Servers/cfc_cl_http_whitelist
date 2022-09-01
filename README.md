@@ -1,4 +1,6 @@
 # cfc_cl_http_whitelist
+Attempts to block any http request on clients that are not in the defined whitelist
+
 
 ## Configuring 
 You can create a file in `lua/cfc_http_restrictions/configs` to add your own default domains to your server.
