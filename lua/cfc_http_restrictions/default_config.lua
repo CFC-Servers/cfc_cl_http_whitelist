@@ -12,8 +12,8 @@ return {
         allowed = false,
     },
     addresses = {
-        ["google.com"] =  { allowed = true, noisy = true },
-        ["www.google.com"] = { allowed = true, noisy = true },
+        ["google.com"] =  { allowed = true },
+        ["www.google.com"] = { allowed = true },
 
         ["steamcommunity.com"] = { allowed = true },
         ["api.github.com"] = { allowed = true },
@@ -74,6 +74,16 @@ return {
 
         ["cdn[%w-_]*.discordapp%.com"] = { allowed = true, pattern = true },
         ["images-([%w%-]+)%.discordapp%.net"] = { allowed = true, pattern = true },
-        ["i([%w-_]+)%.tinypic%.com"] = { allowed = true, pattern = true }
+        ["i([%w-_]+)%.tinypic%.com"] = { allowed = true, pattern = true },
+
+        -- domains starfall docs have
+        ["npms.io"] = {allowed=true},
+        ["fb.me"] = {allowed=true},
+        ["reactjs.org"] = {allowed=true},
+        ["www.w3.org"] = {allowed=true},
+
+         -- fox pictures
+        ["fox.pics"] = {allowed=true},
+        ["*.fox.pics"] = {allowed=true},
     }
 }
