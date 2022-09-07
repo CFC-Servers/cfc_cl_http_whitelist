@@ -38,7 +38,7 @@ function CFCHTTP.mergeConfigs(old, new)
             end
         end
     else
-        ErrorNoHalt("[CFC HTTP Restrictions] Invalid config version: " .. new.version)
+        ErrorNoHalt("[CFC HTTP Restrictions] Invalid config version: " .. tostring(new.version))
     end
 
     return old
