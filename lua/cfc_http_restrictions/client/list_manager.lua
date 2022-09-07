@@ -7,7 +7,7 @@ function CFCHTTP.getAddress( url )
     if cached then return cached end
 
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
-    local  _,  _, protocol, addr, port = string.find( url, pattern )
+    local  _,  _, _, addr, _ = string.find( url, pattern )
     parsedAddressCache[url] = addr
 
     return addr

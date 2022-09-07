@@ -8,7 +8,7 @@ function CFCHTTP.LoadConfigs()
     if CLIENT then
         local fileConfig = CFCHTTP.readFileConfig()
         if fileConfig then
-            CFCHTTP.config = CFCHTTP.mergeConfigs(CFCHTTP.config, fileConfig)
+            CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, fileConfig )
         end
     end
 end

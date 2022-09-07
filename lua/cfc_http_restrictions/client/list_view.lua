@@ -48,7 +48,7 @@ local function populatePanel( form )
         list:AddLine( v, "yes" )
     end
 
-    local block = form:Button("Block")
+    local block = form:Button( "Block" )
     block.DoClick = function()
         local v = textEntry:GetValue()
         if not CFCHTTP.blockAddress( v ) then return end
@@ -67,8 +67,8 @@ local function populatePanel( form )
 
     local save = form:Button( "Save" )
     save.DoClick = function()
-        local conf = CFCHTTP.copyConfig(CFCHTTP.config)
-        for addr, options in pairs(conf.addresses) do
+        local conf = CFCHTTP.copyConfig( CFCHTTP.config )
+        for addr, options in pairs( conf.addresses ) do
             if not options._edited then
                 conf.addresses[addr] = nil
             end

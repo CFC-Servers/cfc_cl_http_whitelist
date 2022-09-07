@@ -47,7 +47,7 @@ local function wrapHTTP()
         local noisy = options and options.noisy
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( req.method, req.url, stack[3], isAllowed, noisy)
+        logRequest( req.method, req.url, stack[3], isAllowed, noisy )
         local onFailure = req.failed
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -133,13 +133,13 @@ local function wrapHTMLPanel( panelName )
     _G[openURL] =  _G[openURL] or controlTable.OpenURL
 
     controlTable.SetHTML = function( self, html, ... )
-        local isAllowed, url = CFCHTTP.isHTMLAllowed( html ) 
+        local isAllowed, url = CFCHTTP.isHTMLAllowed( html )
 
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed )
 
         if not isAllowed then
-            html = [[<h1> BLOCKED </h1>]] 
+            html = [[<h1> BLOCKED </h1>]]
         end
 
         _G[setHTML]( self, html, ... )
