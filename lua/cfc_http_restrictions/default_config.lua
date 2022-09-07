@@ -77,13 +77,16 @@ return {
         ["i([%w-_]+)%.tinypic%.com"] = { allowed = true, pattern = true },
 
         -- domains starfall docs have
-        ["npms.io"] = {allowed=true},
-        ["fb.me"] = {allowed=true},
-        ["reactjs.org"] = {allowed=true},
-        ["www.w3.org"] = {allowed=true},
+        ["npms.io"] = {allowed = true},
+        ["fb.me"] = {allowed = true},
+        ["reactjs.org"] = {allowed = true},
+        ["www.w3.org"] = {allowed = true},
 
          -- fox pictures
-        ["fox.pics"] = {allowed=true},
-        ["*.fox.pics"] = {allowed=true},
+        ["fox.pics"] = {allowed = true},
+        ["*.fox.pics"] = {allowed = true},
+
+        -- media player
+        ["samuelmaddock.github.io"] = {allowed=true, isPermanent=true} -- Media player
     }
 }
