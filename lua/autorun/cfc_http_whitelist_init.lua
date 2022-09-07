@@ -8,8 +8,8 @@ local function includeClient( f )
     end
 end
 
-include("cfc_http_restrictions/config_loader.lua")
-includeClient("cfc_http_restrictions/config_loader.lua")
+include( "cfc_http_restrictions/config_loader.lua" )
+includeClient( "cfc_http_restrictions/config_loader.lua" )
 
 includeClient( "cfc_http_restrictions/client/list_manager.lua" )
 includeClient( "cfc_http_restrictions/client/list_view.lua" )

@@ -42,12 +42,12 @@ local function wrapHTTP()
     print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
-        local options = CFCHTTP.getOptionsForURI(req.url)
+        local options = CFCHTTP.getOptionsForURI( req.url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
-        local stack = string.Split(debug.traceback(), "\n")
-        logRequest( req.method, req.url, stack[3], isAllowed, noisy)
+        local stack = string.Split( debug.traceback(), "\n" )
+        logRequest( req.method, req.url, stack[3], isAllowed, noisy )
         local onFailure = req.failed
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -62,11 +62,11 @@ local function wrapFetch()
     print( "http.Fetch wrapped, original function at '_http_Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
-        local options = CFCHTTP.getOptionsForURI(url)
+        local options = CFCHTTP.getOptionsForURI( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
-        local stack = string.Split(debug.traceback(), "\n")
+        local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -82,11 +82,11 @@ local function wrapPost()
     print( "http.Post wrapped, original function at '_http_Post'" )
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
-        local options = CFCHTTP.getOptionsForURI(url)
+        local options = CFCHTTP.getOptionsForURI( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
-        local stack = string.Split(debug.traceback(), "\n")
+        local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "POST", url, stack[3], isAllowed, noisy )
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -103,7 +103,7 @@ local function wrapPlayURL()
     print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
 
     sound.PlayURL = function( url, flags, callback )
-        local options = CFCHTTP.getOptionsForURI(url)
+        local options = CFCHTTP.getOptionsForURI( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -121,32 +121,32 @@ end
 local function wrapHTMLPanel( panelName )
     print( "Wrapping SetHTML and OpenURL for " .. panelName )
     local funcName = function( functionName )
-        return "_"..panelName.."_"..functionName
+        return "_" .. panelName .. "_" .. functionName
     end
 
     local controlTable = vgui.GetControlTable( panelName )
-    
+
     local setHTML = funcName( "SetHTML" )
     local openURL = funcName( "OpenURL" )
 
     _G[setHTML] =  _G[setHTML] or controlTable.SetHTML
     _G[openURL] =  _G[openURL] or controlTable.OpenURL
-    
+
     controlTable.SetHTML = function( self, html, ... )
-        local isAllowed, url = CFCHTTP.isHTMLAllowed( html ) 
+        local isAllowed, url = CFCHTTP.isHTMLAllowed( html )
 
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed )
 
         if not isAllowed then
-            html = [[<h1> BLOCKED </h1>]] 
+            html = [[<h1> BLOCKED </h1>]]
         end
-    
+
         _G[setHTML]( self, html, ... )
     end
-    
+
     controlTable.OpenURL = function( self, url, ... )
-        local options = CFCHTTP.getOptionsForURI(url)
+        local options = CFCHTTP.getOptionsForURI( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -157,14 +157,13 @@ local function wrapHTMLPanel( panelName )
 
         _G[openURL]( self, url, ... )
     end
-    
 end
 
 hook.Add( "Initialize", "CFC_HttpWhitelist_WrapHTML", function()
     if CFCHTTP.config.wrapHTMLPanels then
-        wrapHTMLPanel("DHTML")
-        wrapHTMLPanel("DPanel")
-        wrapHTMLPanel("DMediaPlayerHTML")
+        wrapHTMLPanel( "DHTML" )
+        wrapHTMLPanel( "DPanel" )
+        wrapHTMLPanel( "DMediaPlayerHTML" )
     end
 end )
 
