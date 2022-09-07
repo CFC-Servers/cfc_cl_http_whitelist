@@ -87,6 +87,6 @@ return {
         ["*.fox.pics"] = {allowed = true},
 
         -- media player
-        ["samuelmaddock.github.io"] = {allowed=true, isPermanent=true} -- Media player
+        ["samuelmaddock.github.io"] = {allowed=true}
     }
 }
