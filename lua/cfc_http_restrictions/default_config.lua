@@ -74,6 +74,9 @@ return {
 
         ["cdn[%w-_]*.discordapp%.com"] = { allowed = true, pattern = true },
         ["images-([%w%-]+)%.discordapp%.net"] = { allowed = true, pattern = true },
-        ["i([%w-_]+)%.tinypic%.com"] = { allowed = true, pattern = true }
+        ["i([%w-_]+)%.tinypic%.com"] = { allowed = true, pattern = true },
+
+        ["(%w+)%.keybase.pub/(.+)"] = { allowed = true, pattern = true },
+        ["tts.cyzon.us/(.+)"] = { allowed = true, pattern = true }
     }
 }
