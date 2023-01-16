@@ -1,3 +1,4 @@
+AddCSLuaFile()
 CFCHTTP = CFCHTTP or {}
 
 
@@ -83,42 +84,44 @@ function CFCHTTP.isHTMLAllowed( html )
 end
 
 
--- file based config functions
-function CFCHTTP.allowAddress( addr )
-    if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
-        notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
-        return false
+if CLIENT then
+    -- file based config functions
+    function CFCHTTP.allowAddress( addr )
+        if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
+            notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+            return false
+        end
+
+        CFCHTTP.config.addresses[addr] = {
+            _edited = true,
+            allowed = true,
+        }
+
+        return true
     end
 
-    CFCHTTP.config.addresses[addr] = {
-        _edited = true,
-        allowed = true,
-    }
+    function CFCHTTP.blockAddress( addr )
+        if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
+            notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+            return false
+        end
 
-    return true
-end
+        CFCHTTP.config.addresses[addr] = {
+            _edited = true,
+            allowed = false,
+        }
 
-function CFCHTTP.blockAddress( addr )
-    if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
-        notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
-        return false
+        return true
     end
 
-    CFCHTTP.config.addresses[addr] = {
-        _edited = true,
-        allowed = false,
-    }
+    function CFCHTTP.removeAddress( addr )
+        if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
+            notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
+            return false
+        end
 
-    return true
-end
+        CFCHTTP.config.addresses[addr] = nil
 
-function CFCHTTP.removeAddress( addr )
-    if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then
-        notification.AddLegacy( "You cant change this address", NOTIFY_ERROR, 5 )
-        return false
+        return true
     end
-
-    CFCHTTP.config.addresses[addr] = nil
-
-    return true
 end

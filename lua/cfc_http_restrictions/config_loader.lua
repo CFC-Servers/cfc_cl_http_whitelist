@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 CFCHTTP = CFCHTTP or {}
 CFCHTTP.config = include( "default_config.lua" )
 
