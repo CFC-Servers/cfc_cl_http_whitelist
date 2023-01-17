@@ -16,13 +16,13 @@ function CFCHTTP.LoadConfigs()
     end )
 end
 
--- LoadLuaConfigs loads the default config and then any lua files in the cfc_http_restrictions/configs directory
+-- loadLuaConfigs loads the default config and then any lua files in the cfc_http_restrictions/<server/client> directories
 function CFCHTTP.loadLuaConfigs()
-    local configDir = "cfc_http_restrictions/configs/"
+    local configDir = "cfc_http_restrictions/"
 
-    local clFiles = file.Find( configDir .. "client/*.lua", "LUA" )
-    for _, fileName in pairs( clFiles ) do
-        local filePath = configDir .. "client/" .. fileName
+    local clFiles = file.Find( configDir .. "*.lua", "LUA" )
+    for _, fileName in ipairs( clFiles ) do
+        local filePath = configDir .. fileName
         AddCSLuaFile( filePath )
 
         if CLIENT then
@@ -34,7 +34,7 @@ function CFCHTTP.loadLuaConfigs()
     if CLIENT then return end
 
     local svFiles = file.Find( configDir .. "server/*.lua", "LUA" )
-    for _, fileName in pairs( svFiles ) do
+    for _, fileName in ipairs( svFiles ) do
         local filePath = configDir .. "server/" .. fileName
         local newConfig = include( filePath )
         CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, newConfig )
