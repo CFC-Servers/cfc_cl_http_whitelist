@@ -66,7 +66,7 @@ end
 
 local function wrapFetch()
     local og = originals.http_Fetch or http.Fetch
-    orignals.http_Fetch = originals.http_Fetch or og
+    originals.http_Fetch = originals.http_Fetch or og
     print( "http.Fetch wrapped, original function at 'CFCHTTP.Originals.http_Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
@@ -198,9 +198,9 @@ end
 
 if SERVER then
     function CFCHTTP.UnwrapFunctions()
-        HTTP = originals.HTTP
-        http.Fetch = originals.http_Fetch
-        http.Post = originals.http_Post
+        HTTP = originals.HTTP or HTTP
+        http.Fetch = originals.http_Fetch or http.Fetch
+        http.Post = originals.http_Post or http.Post
 
         print( "HTTP, http.Fetch, and http.Post unwrapped" )
     end

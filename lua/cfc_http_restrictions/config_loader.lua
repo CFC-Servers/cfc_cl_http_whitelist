@@ -1,14 +1,14 @@
 AddCSLuaFile()
 
 CFCHTTP = CFCHTTP or {}
-CFCHTTP.config = include( "default_config.lua" )
+CFCHTTP.config = include( "cfc_http_restrictions/default_config.lua" )
 
 if SERVER then
     CFCHTTP.svEnabled = CreateConVar( "cfc_http_restrictions_enabled", 0, FCVAR_ARCHIVE + FCVAR_PROTECTED, "Should the HTTP restrictions be enabled?", 0, 1 )
 end
 
 function CFCHTTP.LoadConfigs()
-    CFCHTTP.config = include( "default_config.lua" )
+    CFCHTTP.config = include( "cfc_http_restrictions/default_config.lua" )
     CFCHTTP.loadLuaConfigs()
 
     CFCHTTP.readFileConfig( function( fileConfig )
@@ -18,7 +18,7 @@ end
 
 -- loadLuaConfigs loads the default config and then any lua files in the cfc_http_restrictions/<server/client> directories
 function CFCHTTP.loadLuaConfigs()
-    local configDir = "cfc_http_restrictions/"
+    local configDir = "cfc_http_restrictions/configs/"
 
     local clFiles = file.Find( configDir .. "*.lua", "LUA" )
     for _, fileName in ipairs( clFiles ) do

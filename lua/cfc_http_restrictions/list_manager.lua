@@ -32,7 +32,7 @@ local function escapeAddr( addr )
     return escapedCache[addr]
 end
 
--- TODO reimmplement caching
+-- TODO reimplement caching
 function CFCHTTP.getOptionsForURI( url )
     if not url then return CFCHTTP.config.defaultOptions end
 
