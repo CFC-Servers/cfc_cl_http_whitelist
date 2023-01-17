@@ -78,15 +78,13 @@ function CFCHTTP.readFileConfig( cb )
     end )
 end
 
-if CLIENT then
-    function CFCHTTP.copyConfig( cfg )
-        return util.JSONToTable( util.TableToJSON( cfg ) )
-    end
+function CFCHTTP.copyConfig( cfg )
+    return util.JSONToTable( util.TableToJSON( cfg ) )
+end
 
-    function CFCHTTP.saveFileConfig( config )
-        local fileName = CFCHTTP.getConfigFileName()
-        file.Write( fileName, util.TableToJSON( config, true ) )
+function CFCHTTP.saveFileConfig( config )
+    local fileName = CFCHTTP.getConfigFileName()
+    file.Write( fileName, util.TableToJSON( config, true ) )
 
-        notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
-    end
+    notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
 end
