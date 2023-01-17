@@ -16,7 +16,7 @@ function CFCHTTP.LoadConfigs()
     end )
 end
 
--- loadLuaConfigs loads the default config and then any lua files in the cfc_http_restrictions/configs/<server/client> directories
+-- loadLuaConfigs loads the default config and then any lua files in the cfc_http_restrictions/configs/ and cfc_http_restrictions/configs/server/ directories
 function CFCHTTP.loadLuaConfigs()
     local configDir = "cfc_http_restrictions/configs/"
 
