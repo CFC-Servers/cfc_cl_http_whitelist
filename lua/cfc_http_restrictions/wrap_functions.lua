@@ -106,6 +106,7 @@ local function wrapPost()
     end
 end
 
+local wrapCL
 if CLIENT then
     local function wrapPlayURL()
         local BASS_ERROR_ILLPARAM = 20
@@ -137,6 +138,7 @@ if CLIENT then
         end
 
         local controlTable = vgui.GetControlTable( panelName )
+        if not controlTable then return end
 
         local setHTML = funcName( "SetHTML" )
         local openURL = funcName( "OpenURL" )
@@ -173,17 +175,34 @@ if CLIENT then
         end
     end
 
-    hook.Add( "Initialize", "CFC_HttpWhitelist_WrapHTML", function()
-        if CFCHTTP.config.wrapHTMLPanels then
-            wrapHTMLPanel( "DHTML" )
-            wrapHTMLPanel( "DPanel" )
-            wrapHTMLPanel( "DMediaPlayerHTML" )
-        end
-    end )
+    wrapCL = function()
+        hook.Add( "Think", "CFC_HttpWhitelist_WrapHTML", function()
+            hook.Remove( "Think", "CFC_HttpWhitelist_WrapHTML" )
+            if CFCHTTP.config.wrapHTMLPanels then
+                wrapHTMLPanel( "DHTML" )
+                wrapHTMLPanel( "DPanel" )
+                wrapHTMLPanel( "DMediaPlayerHTML" )
+            end
+        end )
 
-    wrapPlayURL()
+        wrapPlayURL()
+    end
 end
 
-wrapHTTP()
-wrapFetch()
-wrapPost()
+function CFCHTTP.WrapFunctions()
+    if CLIENT then wrapCL() end
+    wrapHTTP()
+    wrapFetch()
+    wrapPost()
+end
+
+if SERVER then
+    function CFCHTTP.UnwrapFunctions()
+        HTTP = originals.HTTP
+        http.Fetch = originals.http_Fetch
+        http.Post = originals.http_Post
+
+        print( "HTTP, http.Fetch, and http.Post unwrapped" )
+    end
+end
+

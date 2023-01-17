@@ -3,6 +3,10 @@ AddCSLuaFile()
 CFCHTTP = CFCHTTP or {}
 CFCHTTP.config = include( "default_config.lua" )
 
+if SERVER then
+    CFCHTTP.svEnabled = CreateConVar( "cfc_http_restrictions_enabled", 0, FCVAR_ARCHIVE + FCVAR_PROTECTED, "Should the HTTP restrictions be enabled?", 0, 1 )
+end
+
 function CFCHTTP.LoadConfigs()
     CFCHTTP.config = include( "default_config.lua" )
     CFCHTTP.loadLuaConfigs()
@@ -86,5 +90,3 @@ if CLIENT then
         notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
     end
 end
-
-CFCHTTP.LoadConfigs()
