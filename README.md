@@ -52,4 +52,4 @@ Here are the options available for a domain:
 ## Shortcomings
 Because this tool operates by wrapping the default functions, this addon won't work when a script loads before it and localizes one of the functions.
 
-This is rare, but not unheard of, and we could possibly make code to fix those situations. Make an [Issue](/issues) if you find an example of this happening.
+This is rare, but not unheard of, and we could possibly make code to fix those situations. Make an [Issue](https://github.com/CFC-Servers/cfc_http_whitelist/issues) if you find an example of this happening.
