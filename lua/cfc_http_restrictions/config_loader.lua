@@ -4,7 +4,7 @@ CFCHTTP = CFCHTTP or {}
 CFCHTTP.config = include( "cfc_http_restrictions/default_config.lua" )
 
 if SERVER then
-    CFCHTTP.svEnabled = CreateConVar( "cfc_http_restrictions_enabled", 0, FCVAR_ARCHIVE + FCVAR_PROTECTED, "Should the HTTP restrictions be enabled?", 0, 1 )
+    CFCHTTP.svEnabled = CreateConVar( "cfc_http_restrictions_sv_enabled", 0, FCVAR_ARCHIVE + FCVAR_PROTECTED, "Should the HTTP whitelist run serverside?", 0, 1 )
 end
 
 function CFCHTTP.LoadConfigs()
