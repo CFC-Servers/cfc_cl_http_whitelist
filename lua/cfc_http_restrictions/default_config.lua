@@ -14,7 +14,9 @@ return {
     addresses = {
         ["google.com"] =  { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
-
+        
+        
+        ["api.steampowered.com"] =  = { allowed=true },
         ["steamcommunity.com"] = { allowed = true },
         ["api.github.com"] = { allowed = true },
         ["github.com"] = { allowed = true },
@@ -77,6 +79,7 @@ return {
         ["i([%w-_]+)%.tinypic%.com"] = { allowed = true, pattern = true },
 
         ["(%w+)%.keybase.pub/(.+)"] = { allowed = true, pattern = true },
-        ["tts.cyzon.us/(.+)"] = { allowed = true, pattern = true }
+        ["tts.cyzon.us/(.+)"] = { allowed = true, pattern = true },
+
     }
 }
