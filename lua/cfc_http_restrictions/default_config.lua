@@ -62,7 +62,7 @@ return {
         ["puu.sh"] = { allowed = true },
 
         ["images.akamai.steamusercontent.com"] = { allowed = true },
-
+        ["steamuserimages-a.akamaihd.net"]  = { allowed=true },
         ["steamcdn-a.akamaihd.net"] = { allowed = true },
 
         ["facepunch.com"] = { allowed = true },
