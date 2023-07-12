@@ -97,8 +97,9 @@ local function wrapPost()
     end
 end
 
+CFCHTTP.BASS_HTTP_URL_BLOCKED = 10200
+
 local function wrapPlayURL()
-    local BASS_ERROR_ILLPARAM = 20
     _sound_PlayURL = _sound_PlayURL or sound.PlayURL
     print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
 
@@ -110,7 +111,7 @@ local function wrapPlayURL()
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
-            if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
+            if callback then callback( nil, CFCHTTP.BASS_HTTP_URL_BLOCKED, "BASS_HTTP_URL_BLOCKED" ) end
             return
         end
         _sound_PlayURL( url, flags, callback )
@@ -129,8 +130,8 @@ local function wrapHTMLPanel( panelName )
     local setHTML = funcName( "SetHTML" )
     local openURL = funcName( "OpenURL" )
 
-    _G[setHTML] =  _G[setHTML] or controlTable.SetHTML
-    _G[openURL] =  _G[openURL] or controlTable.OpenURL
+    _G[setHTML] = _G[setHTML] or controlTable.SetHTML
+    _G[openURL] = _G[openURL] or controlTable.OpenURL
 
     controlTable.SetHTML = function( self, html, ... )
         local isAllowed, url = CFCHTTP.isHTMLAllowed( html )
