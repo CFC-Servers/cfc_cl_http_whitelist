@@ -97,7 +97,11 @@ local function wrapPost()
     end
 end
 
-CFCHTTP.BASS_URI_BLOCKED = 10200
+-- the URI was blocked because it was not in the whitelist
+CFCHTTP.BASS_BLOCKED_URI = 11001
+-- unused: the request was blocked after inspecting the content
+-- this is likely because the content could result in playing blocked URIs
+CFCHTTP.BASS_BLOCKED_CONTENT = 11002
 
 local function wrapPlayURL()
     _sound_PlayURL = _sound_PlayURL or sound.PlayURL
@@ -111,7 +115,7 @@ local function wrapPlayURL()
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
-            if callback then callback( nil, CFCHTTP.BASS_URI_BLOCKED, "BASS_URI_BLOCKED" ) end
+            if callback then callback( nil, CFCHTTP.BASS_BLOCKED_URI, "BASS_BLOCKED_URI" ) end
             return
         end
         _sound_PlayURL( url, flags, callback )
