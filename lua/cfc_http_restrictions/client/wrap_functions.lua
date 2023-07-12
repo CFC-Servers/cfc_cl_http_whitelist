@@ -97,7 +97,7 @@ local function wrapPost()
     end
 end
 
-CFCHTTP.BASS_HTTP_URL_BLOCKED = 10200
+CFCHTTP.BASS_URI_BLOCKED = 10200
 
 local function wrapPlayURL()
     _sound_PlayURL = _sound_PlayURL or sound.PlayURL
@@ -111,7 +111,7 @@ local function wrapPlayURL()
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
-            if callback then callback( nil, CFCHTTP.BASS_HTTP_URL_BLOCKED, "BASS_HTTP_URL_BLOCKED" ) end
+            if callback then callback( nil, CFCHTTP.BASS_URI_BLOCKED, "BASS_URI_BLOCKED" ) end
             return
         end
         _sound_PlayURL( url, flags, callback )
