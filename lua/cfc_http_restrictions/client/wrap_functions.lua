@@ -97,8 +97,13 @@ local function wrapPost()
     end
 end
 
+-- the URI was blocked because it was not in the whitelist
+CFCHTTP.BASS_ERROR_BLOCKED_URI = 11001
+-- unused: the request was blocked after inspecting the content
+-- this is likely because the content could result in playing blocked URIs
+CFCHTTP.BASS_ERROR_BLOCKED_CONTENT = 11002
+
 local function wrapPlayURL()
-    local BASS_ERROR_ILLPARAM = 20
     _sound_PlayURL = _sound_PlayURL or sound.PlayURL
     print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
 
@@ -112,14 +117,14 @@ local function wrapPlayURL()
 
         if not isAllowed then
             logRequest( "GET", url, stack[3], isAllowed, noisy )
-            if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
+            if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_URI, "BASS_ERROR_BLOCKED_URI" ) end
             return
         end
 
         CFCHTTP.GetFileDataURLS( url, function( uris, err )
             if err ~= nil then
                 print( "Error getting URLs: " .. err )
-                if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
+                if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
                 return
             end
 
@@ -127,7 +132,7 @@ local function wrapPlayURL()
             local isAllowed = options.combined.allowed
             logRequest( "GET", url, stack[3], isAllowed, noisy )
             if not isAllowed then
-                if callback then callback( nil, BASS_ERROR_ILLPARAM, "BASS_ERROR_ILLPARAM" ) end
+                if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
                 return
             end
 
