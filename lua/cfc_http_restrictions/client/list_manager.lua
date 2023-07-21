@@ -32,7 +32,7 @@ local function escapeAddr( addr )
 end
 
 -- TODO reimmplement caching
-function CFCHTTP.getOptionsForURI( url )
+function CFCHTTP.GetOptionsForURI( url )
     if not url then return CFCHTTP.config.defaultOptions end
 
     if CFCHTTP.isAssetURI( url ) then return CFCHTTP.config.defaultAssetURIOptions end
@@ -58,105 +58,30 @@ function CFCHTTP.getOptionsForURI( url )
     return CFCHTTP.config.defaultOptions
 end
 
-local function getUrlsFromText( text )
-    local pattern = "%a+://[%a%d%.-]+:?%d*/?[a-zA-Z0-9%.]*"
-
-    local urls = {}
-    for url in string.gmatch( text, pattern ) do
-        table.insert( urls, url )
-    end
-
-    return urls
-end
-
----@param url string
----@param callback fun( allowed: boolean, url: string )
-function CFCHTTP.isPLSUrlAllowed( url, callback )
-    _http_Fetch( url, function( body, _ )
-        local allowed, reason = CFCHTTP.isPLSDataAllowed( body )
-        callback( allowed, reason )
-    end, function( err )
-        callback( false, err )
-    end )
-end
-
-function CFCHTTP.isHTMLAllowed( html )
-    local urls = getUrlsFromText( html )
-    for _, url in pairs( urls ) do
-        local options = CFCHTTP.getOptionsForURI( url )
-
+--- Returns the options for a list of URIs
+---@param uris string[]
+---@return {options: table<string, table>, combined: table|nil, combinedUri: string|nil}
+function CFCHTTP.GetOptionsForURIs( uris )
+    local out = {
+        combined = nil,
+        options = {},
+    }
+    for _, uri in pairs( uris ) do
+        local options = CFCHTTP.GetOptionsForURI( uri )
+        out.options[uri] = options
         if options and not options.allowed then
-            return false, url
+            out.combined = options
+            out.combinedUri = uri
+        elseif not out.combined then
+            out.combined = options
+            out.combinedUri = uri
         end
     end
-
-    return true, ""
-end
-
-local function loadPLSFile( body )
-    body = string.Replace( body, "\r\n", "\n" )
-    body = string.Replace( body, "\r", "\n" )
-
-    local lines = string.Split( body, "\n" )
-    local section;
-    local data = {}
-
-    for _, line in ipairs( lines ) do
-        local tempSection = line:match( "^%[([^%[%]]+)%]$" );
-        if tempSection then
-            section = tonumber( tempSection ) and tonumber( tempSection ) or tempSection;
-            data[section] = data[section] or {};
-        end
-
-        local param, value = line:match( "^([%w|_]+)%s-=%s-(.+)$" );
-        if param and value ~= nil then
-            if tonumber( value ) then
-                value = tonumber( value );
-            end
-            data[section][param] = value;
-        end
+    if out.combined == nil then
+        out.combined = CFCHTTP.config.defaultOptions
     end
 
-    return data;
-end
-
----@param body string
----@return string[] urls
----@return string|nil errror
-local function getUrlsFromPls( body )
-    if #body > 10000 then return {}, "body too large" end
-    local urls = getUrlsFromText( body )
-
-    local plsData = loadPLSFile( body )
-    if not plsData.playlist then
-        return urls, "no playlist section"
-    end
-
-    for i = 1, 150 do
-        local f = plsData.playlist["File" .. i]
-        if not f then
-            return urls, nil
-        end
-        table.insert( urls, f )
-    end
-    return urls, "too many files"
-end
-
----@param body string
----@return boolean allowed is it allowed
----@return string url url or or reason
-function CFCHTTP.isPLSDataAllowed( body )
-    local urls, reason = getUrlsFromPls( body )
-    if reason ~= nil then return false, reason end
-    for _, url in pairs( urls ) do
-        local options = CFCHTTP.getOptionsForURI( url )
-
-        if options and not options.allowed then
-            return false, url
-        end
-    end
-
-    return true, ""
+    return out
 end
 
 -- file based config functions
