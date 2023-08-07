@@ -2,6 +2,8 @@ CFCHTTP = CFCHTTP or {}
 
 
 local parsedAddressCache = {}
+---@parm url string
+---@return string
 function CFCHTTP.getAddress( url )
     local cached = parsedAddressCache[url]
     if cached then return cached end
@@ -32,7 +34,7 @@ local function escapeAddr( addr )
 end
 
 -- TODO reimmplement caching
-function CFCHTTP.GetOptionsForURI( url )
+function CFCHTTP.GetOptionsForURL( url )
     if not url then return CFCHTTP.config.defaultOptions end
 
     if CFCHTTP.isAssetURI( url ) then return CFCHTTP.config.defaultAssetURIOptions end
@@ -67,7 +69,7 @@ function CFCHTTP.GetOptionsForURIs( uris )
         options = {},
     }
     for _, uri in pairs( uris ) do
-        local options = CFCHTTP.GetOptionsForURI( uri )
+        local options = CFCHTTP.GetOptionsForURL( uri )
         out.options[uri] = options
         if options and not options.allowed then
             out.combined = options

@@ -12,11 +12,11 @@ return {
         allowed = false,
     },
     addresses = {
-        ["google.com"] =  { allowed = true, noisy = true },
+        ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
-        
-        
-        ["api.steampowered.com"] = { allowed=true },
+
+
+        ["api.steampowered.com"] = { allowed = true },
         ["steamcommunity.com"] = { allowed = true },
         ["api.github.com"] = { allowed = true },
         ["github.com"] = { allowed = true },

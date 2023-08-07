@@ -42,7 +42,7 @@ local function wrapHTTP()
     print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
-        local options = CFCHTTP.GetOptionsForURI( req.url )
+        local options = CFCHTTP.GetOptionsForURL( req.url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -62,7 +62,7 @@ local function wrapFetch()
     print( "http.Fetch wrapped, original function at '_http_Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
-        local options = CFCHTTP.GetOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -82,7 +82,7 @@ local function wrapPost()
     print( "http.Post wrapped, original function at '_http_Post'" )
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
-        local options = CFCHTTP.GetOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -111,7 +111,7 @@ local function wrapPlayURL()
     sound.PlayURL = function( url, flags, callback )
         local stack = string.Split( debug.traceback(), "\n" )
 
-        local options = CFCHTTP.GetOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -172,7 +172,7 @@ local function wrapHTMLPanel( panelName )
     end
 
     controlTable.OpenURL = function( self, url, ... )
-        local options = CFCHTTP.GetOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
