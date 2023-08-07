@@ -20,7 +20,12 @@ end
 ---@param url string
 ---@param callback fun( urls: string[], err: string|nil)
 function CFCHTTP.GetFileDataURLS( url, callback )
-    http.Fetch( url, function( body )
+    http.Fetch( url, function( body, _, _, code )
+        if code < 200 or code > 299 then
+            callback( {}, "HTTP request returned status code " .. code )
+            return
+        end
+
         local filetype = CFCHTTP.getFileType( body )
         if filetype then
             local urls, err = filetype.GetURLSFromData( body )
