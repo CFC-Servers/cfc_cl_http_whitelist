@@ -128,6 +128,12 @@ local function wrapPlayURL()
                 return
             end
 
+            if #uris == 0 then
+                logRequest( "GET", url, stack[3], isAllowed, noisy )
+                _sound_PlayURL( url, flags, callback )
+                return
+            end
+
             local options = CFCHTTP.GetOptionsForURIs( uris )
             local isAllowed = options.combined.allowed
             logRequest( "GET", url, stack[3], isAllowed, noisy )

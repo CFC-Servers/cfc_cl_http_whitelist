@@ -32,6 +32,10 @@ function CFCHTTP.GetFileDataURLS( url, callback )
             if err then
                 callback( {}, err )
             else
+                if #urls == 0 then
+                    callback( {}, "No URLs found in file" )
+                    return
+                end
                 callback( urls, nil )
             end
         else
