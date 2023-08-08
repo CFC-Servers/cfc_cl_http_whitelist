@@ -134,7 +134,7 @@ local function wrapPlayURL()
                 return
             end
 
-            local options = CFCHTTP.GetOptionsForURIs( uris )
+            local options = CFCHTTP.GetOptionsForURLs( uris )
             local isAllowed = options.combined.allowed
             logRequest( "GET", url, stack[3], isAllowed, noisy )
             if not isAllowed then
@@ -164,7 +164,7 @@ local function wrapHTMLPanel( panelName )
 
     controlTable.SetHTML = function( self, html, ... )
         local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
-        local options = CFCHTTP.GetOptionsForURIs( urls )
+        local options = CFCHTTP.GetOptionsForURLs( urls )
         local isAllowed = err == nil and options.combined and options.combined.allowed
 
         local stack = string.Split( debug.traceback(), "\n" )

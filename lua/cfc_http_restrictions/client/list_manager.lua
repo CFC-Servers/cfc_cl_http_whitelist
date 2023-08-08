@@ -60,23 +60,23 @@ function CFCHTTP.GetOptionsForURL( url )
     return CFCHTTP.config.defaultOptions
 end
 
---- Returns the options for a list of URIs
----@param uris string[]
+--- Returns the options for a list of URLs
+---@param urls string[]
 ---@return {options: table<string, table>, combined: table|nil, combinedUri: string|nil}
-function CFCHTTP.GetOptionsForURIs( uris )
+function CFCHTTP.GetOptionsForURLs( urls )
     local out = {
         combined = nil,
         options = {},
     }
-    for _, uri in pairs( uris ) do
-        local options = CFCHTTP.GetOptionsForURL( uri )
-        out.options[uri] = options
+    for _, url in pairs( urls ) do
+        local options = CFCHTTP.GetOptionsForURL( url )
+        out.options[url] = options
         if options and not options.allowed then
             out.combined = options
-            out.combinedUri = uri
+            out.combinedUri = url
         elseif not out.combined then
             out.combined = options
-            out.combinedUri = uri
+            out.combinedUri = url
         end
     end
     if out.combined == nil then
