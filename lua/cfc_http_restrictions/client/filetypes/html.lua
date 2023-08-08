@@ -1,6 +1,5 @@
 local HTML = {
     name = "HTML",
-    allowed = true,
     extension = "html",
     maxFileSize = 0,
 }

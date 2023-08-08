@@ -1,6 +1,6 @@
 CFCHTTP.FileTypes.PLS = {
     name = "PLS",
-    allowed = true,
+    allowed = false,
     extension = ".pls",
     maxFileSize = 10000,
 }
@@ -67,6 +67,8 @@ end
 ---@return string[] urls
 ---@return string|nil error
 function PLS.GetURLSFromData( body )
+    if not PLS.allowed then return {}, "pls files are not allowed" end
+
     if #body > PLS.maxFileSize then return {}, "body too large" end
     local urls = getUrlsFromText( body )
 
