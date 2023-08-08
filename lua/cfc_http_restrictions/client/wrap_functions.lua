@@ -134,8 +134,9 @@ local function wrapPlayURL()
                 return
             end
 
-            local options = CFCHTTP.GetOptionsForURLs( uris )
-            local isAllowed = options.combined.allowed
+            options = CFCHTTP.GetOptionsForURLs( uris )
+            isAllowed = options.combined.allowed
+
             logRequest( "GET", url, stack[3], isAllowed, noisy )
             if not isAllowed then
                 if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
