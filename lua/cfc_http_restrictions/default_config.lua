@@ -4,7 +4,7 @@ return {
     version = "1", -- this field allows backwards compatibility if the config structure is ever updated
 
     -- if this is true html panel functions will be wrapped and checked for potential urls
-    wrapHTMLPanels = false,
+    wrapHTMLPanels = true,
 
     defaultAssetURIOptions = {
         allowed = true
