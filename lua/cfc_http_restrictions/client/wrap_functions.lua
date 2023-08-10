@@ -17,7 +17,9 @@ local function logRequest( method, url, fileLocation, allowed, noisy )
     local requestStatus = allowed and "ALLOWED" or "BLOCKED"
     local requestColor = allowed and COLORS.GREEN or COLORS.RED
 
-    if isVerbose == false then
+    if not url then
+        url = "unknown"
+    elseif isVerbose == false then
         local address = CFCHTTP.getAddress( url )
         if noisy then return end
 
