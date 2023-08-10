@@ -3,6 +3,7 @@ AddCSLuaFile()
 return {
     version = "1", -- this field allows backwards compatibility if the config structure is ever updated
 
+    -- if this is true html panel functions will be wrapped and checked for potential urls
     wrapHTMLPanels = false,
 
     defaultAssetURIOptions = {
@@ -12,15 +13,9 @@ return {
         allowed = false,
     },
     addresses = {
+        -- google
         ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
-
-
-        ["api.steampowered.com"] = { allowed = true },
-        ["steamcommunity.com"] = { allowed = true },
-        ["api.github.com"] = { allowed = true },
-        ["github.com"] = { allowed = true },
-        ["thegrb93.github.io"] = { allowed = true },
 
         -- dropbox
         ["dl.dropboxusercontent.com"] = { allowed = true },
@@ -39,6 +34,9 @@ return {
         ["youtube.com"] = { allowed = true },
         ["youtu.be"] = { allowed = true },
 
+        -- github
+        ["github.com"] = { allowed = true },
+        ["api.github.com"] = { allowed = true },
         ["raw.githubusercontent.com"] = { allowed = true },
         ["gist.githubusercontent.com"] = { allowed = true },
 
@@ -46,23 +44,23 @@ return {
 
         ["bitbucket.org"] = { allowed = true },
 
-        ["u.teknik.io"] = { allowed = true },
-
         ["i.imgur.com"] = { allowed = true },
-
-        ["pastebin.com"] = { allowed = true },
-
-        ["p.teknik.io"] = { allowed = true },
 
         ["paste.ee"] = { allowed = true },
 
+        ["pastebin.com"] = { allowed = true },
+
         ["hastebin.com"] = { allowed = true },
+
         ["hastebin.nl"] = { allowed = true },
 
         ["puu.sh"] = { allowed = true },
 
+        -- steam
+        ["api.steampowered.com"] = { allowed = true },
+        ["steamcommunity.com"] = { allowed = true },
         ["images.akamai.steamusercontent.com"] = { allowed = true },
-
+        ["steamuserimages-a.akamaihd.net"] = { allowed = true, permanent = true },
         ["steamcdn-a.akamaihd.net"] = { allowed = true },
 
         ["facepunch.com"] = { allowed = true },
@@ -70,7 +68,9 @@ return {
 
         ["i.redditmedia.com"] = { allowed = true },
         ["i.redd.it"] = { allowed = true },
+
         ["api.wolframalpha.com"] = { allowed = true },
+
         ["text-to-speech-demo.ng.bluemix.net"] = { allowed = true },
         ["translate.google.com"] = { allowed = true },
 
@@ -81,5 +81,11 @@ return {
         ["(%w+)%.keybase.pub"] = { allowed = true, pattern = true },
         ["tts.cyzon.us"] = { allowed = true },
 
+        -- domains starfall docs have
+        ["npms.io"] = { allowed = true },
+        ["fb.me"] = { allowed = true },
+        ["reactjs.org"] = { allowed = true },
+        ["www.w3.org"] = { allowed = true },
+        ["thegrb93.github.io"] = { allowed = true },
     }
 }
