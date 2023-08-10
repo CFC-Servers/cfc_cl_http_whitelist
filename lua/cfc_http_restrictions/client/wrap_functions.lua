@@ -161,14 +161,22 @@ local function wrapHTMLPanel( panelName )
 
     local setHTML = funcName( "SetHTML" )
     local openURL = funcName( "OpenURL" )
+    local runJavascript = funcName( "RunJavascript" )
 
     _G[setHTML] = _G[setHTML] or controlTable.SetHTML
     _G[openURL] = _G[openURL] or controlTable.OpenURL
+    _G[runJavascript] = _G[runJavascript] or controlTable.RunJavascript
 
     controlTable.SetHTML = function( self, html, ... )
         local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
         local options = CFCHTTP.GetOptionsForURLs( urls )
-        local isAllowed = err == nil and options.combined and options.combined.allowed
+
+        local isAllowed
+        if #urls == 0 then
+            isAllowed = true
+        else
+            isAllowed = err == nil and options.combined and options.combined.allowed
+        end
 
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", options.combinedUri, stack[3], isAllowed )
@@ -178,6 +186,28 @@ local function wrapHTMLPanel( panelName )
         end
 
         _G[setHTML]( self, html, ... )
+    end
+
+    controlTable.RunJavascript = function( self, js )
+        print( js )
+        local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( js )
+        local options = CFCHTTP.GetOptionsForURLs( urls )
+
+        local isAllowed
+        if #urls == 0 then
+            isAllowed = true
+        else
+            isAllowed = err == nil and options.combined and options.combined.allowed
+        end
+
+        local stack = string.Split( debug.traceback(), "\n" )
+        logRequest( "GET", options.combinedUri, stack[3], isAllowed )
+
+        if not isAllowed then
+            return
+        end
+
+        _G[runJavascript]( self, js )
     end
 
     controlTable.OpenURL = function( self, url, ... )
