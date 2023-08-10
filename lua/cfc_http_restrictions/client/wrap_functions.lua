@@ -189,7 +189,6 @@ local function wrapHTMLPanel( panelName )
     end
 
     controlTable.RunJavascript = function( self, js )
-        print( js )
         local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( js )
         local options = CFCHTTP.GetOptionsForURLs( urls )
 
