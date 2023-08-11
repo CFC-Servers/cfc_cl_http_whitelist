@@ -14,10 +14,13 @@ return {
     addresses = {
         ["google.com"] =  { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
-        
-        
-        ["api.steampowered.com"] = { allowed=true },
+
+        ["api.steampowered.com"] = { allowed = true },
         ["steamcommunity.com"] = { allowed = true },
+        ["developer.valvesoftware.com"] = { allowed = true },
+        ["avatars.cloudflare.steamstatic.com"] = { allowed = true },
+        ["avatars.akamai.steamstatic.com"] = { allowed = true },
+
         ["api.github.com"] = { allowed = true },
         ["github.com"] = { allowed = true },
         ["thegrb93.github.io"] = { allowed = true },
