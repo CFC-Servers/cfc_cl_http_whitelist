@@ -14,9 +14,8 @@ return {
     addresses = {
         ["google.com"] =  { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
-        
-        
-        ["api.steampowered.com"] = { allowed=true },
+
+        ["api.steampowered.com"] = { allowed = true },
         ["steamcommunity.com"] = { allowed = true },
         ["avatars.cloudflare.steamstatic.com"] = { allowed = true },
         ["avatars.akamai.steamstatic.com"] = { allowed = true },
