@@ -18,6 +18,8 @@ return {
         
         ["api.steampowered.com"] = { allowed=true },
         ["steamcommunity.com"] = { allowed = true },
+        ["avatars.cloudflare.steamstatic.com"] = { allowed = true },
+        ["avatars.akamai.steamstatic.com"] = { allowed = true },
         ["api.github.com"] = { allowed = true },
         ["github.com"] = { allowed = true },
         ["thegrb93.github.io"] = { allowed = true },
