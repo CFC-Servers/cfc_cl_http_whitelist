@@ -185,7 +185,7 @@ local function wrapHTMLPanel( panelName )
             html = [[<h1> BLOCKED </h1>]]
         end
 
-        _G[setHTML]( self, html, ... )
+        return _G[setHTML]( self, html, ... )
     end
 
     controlTable.RunJavascript = function( self, js )
@@ -194,7 +194,7 @@ local function wrapHTMLPanel( panelName )
 
         local isAllowed
         if #urls == 0 then
-            isAllowed = true
+            return _G[runJavascript]( self, js )
         else
             isAllowed = err == nil and options.combined and options.combined.allowed
         end
@@ -206,7 +206,7 @@ local function wrapHTMLPanel( panelName )
             return
         end
 
-        _G[runJavascript]( self, js )
+        return _G[runJavascript]( self, js )
     end
 
     controlTable.OpenURL = function( self, url, ... )
@@ -219,7 +219,7 @@ local function wrapHTMLPanel( panelName )
 
         if not isAllowed then return end
 
-        _G[openURL]( self, url, ... )
+        return _G[openURL]( self, url, ... )
     end
 end
 
