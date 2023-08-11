@@ -2,12 +2,14 @@ CFCHTTP = CFCHTTP or {}
 
 
 local parsedAddressCache = {}
+---@parm url string
+---@return string
 function CFCHTTP.getAddress( url )
     local cached = parsedAddressCache[url]
     if cached then return cached end
 
     local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
-    local  _,  _, _, addr, _ = string.find( url, pattern )
+    local _, _, _, addr, _ = string.find( url, pattern )
     parsedAddressCache[url] = addr
 
     return addr
@@ -32,7 +34,7 @@ local function escapeAddr( addr )
 end
 
 -- TODO reimmplement caching
-function CFCHTTP.getOptionsForURI( url )
+function CFCHTTP.GetOptionsForURL( url )
     if not url then return CFCHTTP.config.defaultOptions end
 
     if CFCHTTP.isAssetURI( url ) then return CFCHTTP.config.defaultAssetURIOptions end
@@ -58,30 +60,31 @@ function CFCHTTP.getOptionsForURI( url )
     return CFCHTTP.config.defaultOptions
 end
 
-local function getUrlsInHTML( html )
-    local pattern = "%a+://[%a%d%.-]+:?%d*/?[a-zA-Z0-9%.]*"
-
-    local urls = {}
-    for url in string.gmatch( html, pattern ) do
-        table.insert( urls, url )
-    end
-
-    return urls
-end
-
-function CFCHTTP.isHTMLAllowed( html )
-    local urls = getUrlsInHTML( html )
+--- Returns the options for a list of URLs
+---@param urls string[]
+---@return {options: table<string, table>, combined: table|nil, combinedUri: string|nil}
+function CFCHTTP.GetOptionsForURLs( urls )
+    local out = {
+        combined = nil,
+        options = {},
+    }
     for _, url in pairs( urls ) do
-        local options = CFCHTTP.getOptionsForURI( url )
-
+        local options = CFCHTTP.GetOptionsForURL( url )
+        out.options[url] = options
         if options and not options.allowed then
-            return false, url
+            out.combined = options
+            out.combinedUri = url
+        elseif not out.combined then
+            out.combined = options
+            out.combinedUri = url
         end
     end
+    if out.combined == nil then
+        out.combined = CFCHTTP.config.defaultOptions
+    end
 
-    return true, ""
+    return out
 end
-
 
 -- file based config functions
 function CFCHTTP.allowAddress( addr )

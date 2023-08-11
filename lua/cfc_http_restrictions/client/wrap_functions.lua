@@ -17,7 +17,9 @@ local function logRequest( method, url, fileLocation, allowed, noisy )
     local requestStatus = allowed and "ALLOWED" or "BLOCKED"
     local requestColor = allowed and COLORS.GREEN or COLORS.RED
 
-    if isVerbose == false then
+    if not url then
+        url = "unknown"
+    elseif isVerbose == false then
         local address = CFCHTTP.getAddress( url )
         if noisy then return end
 
@@ -42,7 +44,7 @@ local function wrapHTTP()
     print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
-        local options = CFCHTTP.getOptionsForURI( req.url )
+        local options = CFCHTTP.GetOptionsForURL( req.url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -62,7 +64,7 @@ local function wrapFetch()
     print( "http.Fetch wrapped, original function at '_http_Fetch'" )
 
     http.Fetch = function( url, onSuccess, onFailure, headers )
-        local options = CFCHTTP.getOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -82,7 +84,7 @@ local function wrapPost()
     print( "http.Post wrapped, original function at '_http_Post'" )
 
     http.Post = function( url, params, onSuccess, onFailure, headers )
-        local options = CFCHTTP.getOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -107,18 +109,44 @@ local function wrapPlayURL()
     _sound_PlayURL = _sound_PlayURL or sound.PlayURL
     print( "sound.PlayURL wrapped, original function at _sound_PlayUrl" )
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     sound.PlayURL = function( url, flags, callback )
-        local options = CFCHTTP.getOptionsForURI( url )
+        local stack = string.Split( debug.traceback(), "\n" )
+
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
-        local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", url, stack[3], isAllowed, noisy )
         if not isAllowed then
+            logRequest( "GET", url, stack[3], isAllowed, noisy )
             if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_URI, "BASS_ERROR_BLOCKED_URI" ) end
             return
         end
-        _sound_PlayURL( url, flags, callback )
+
+        CFCHTTP.GetFileDataURLS( url, function( uris, err )
+            if err ~= nil then
+                print( "Error getting URLs: " .. err )
+                if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
+                return
+            end
+
+            if #uris == 0 then
+                logRequest( "GET", url, stack[3], isAllowed, noisy )
+                _sound_PlayURL( url, flags, callback )
+                return
+            end
+
+            options = CFCHTTP.GetOptionsForURLs( uris )
+            isAllowed = options.combined.allowed
+
+            logRequest( "GET", url, stack[3], isAllowed, noisy )
+            if not isAllowed then
+                if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
+                return
+            end
+
+            _sound_PlayURL( url, flags, callback )
+        end )
     end
 end
 
@@ -133,25 +161,56 @@ local function wrapHTMLPanel( panelName )
 
     local setHTML = funcName( "SetHTML" )
     local openURL = funcName( "OpenURL" )
+    local runJavascript = funcName( "RunJavascript" )
 
     _G[setHTML] = _G[setHTML] or controlTable.SetHTML
     _G[openURL] = _G[openURL] or controlTable.OpenURL
+    _G[runJavascript] = _G[runJavascript] or controlTable.RunJavascript
 
     controlTable.SetHTML = function( self, html, ... )
-        local isAllowed, url = CFCHTTP.isHTMLAllowed( html )
+        local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
+        local options = CFCHTTP.GetOptionsForURLs( urls )
+
+        local isAllowed
+        if #urls == 0 then
+            isAllowed = true
+        else
+            isAllowed = err == nil and options.combined and options.combined.allowed
+        end
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", url, stack[3], isAllowed )
+        logRequest( "GET", options.combinedUri, stack[3], isAllowed )
 
         if not isAllowed then
             html = [[<h1> BLOCKED </h1>]]
         end
 
-        _G[setHTML]( self, html, ... )
+        return _G[setHTML]( self, html, ... )
+    end
+
+    controlTable.RunJavascript = function( self, js )
+        local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( js )
+        local options = CFCHTTP.GetOptionsForURLs( urls )
+
+        local isAllowed
+        if #urls == 0 then
+            return _G[runJavascript]( self, js )
+        else
+            isAllowed = err == nil and options.combined and options.combined.allowed
+        end
+
+        local stack = string.Split( debug.traceback(), "\n" )
+        logRequest( "GET", options.combinedUri, stack[3], isAllowed )
+
+        if not isAllowed then
+            return
+        end
+
+        return _G[runJavascript]( self, js )
     end
 
     controlTable.OpenURL = function( self, url, ... )
-        local options = CFCHTTP.getOptionsForURI( url )
+        local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
@@ -160,7 +219,7 @@ local function wrapHTMLPanel( panelName )
 
         if not isAllowed then return end
 
-        _G[openURL]( self, url, ... )
+        return _G[openURL]( self, url, ... )
     end
 end
 

@@ -12,7 +12,7 @@ return {
         allowed = false,
     },
     addresses = {
-        ["google.com"] =  { allowed = true, noisy = true },
+        ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
 
         ["api.steampowered.com"] = { allowed = true },
