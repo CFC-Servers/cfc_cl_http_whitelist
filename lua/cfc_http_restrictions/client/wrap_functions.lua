@@ -182,7 +182,7 @@ local function wrapHTMLPanel( panelName )
         logRequest( "GET", options.combinedUri, stack[3], isAllowed )
 
         if not isAllowed then
-            html = [[<h1> BLOCKED </h1>]]
+            html = [[<h1>BLOCKED By CFC HTTP Whitelist</h1>]]
         end
 
         return _G[setHTML]( self, html, ... )

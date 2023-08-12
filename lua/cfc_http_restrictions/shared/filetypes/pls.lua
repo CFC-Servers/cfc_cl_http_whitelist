@@ -50,19 +50,6 @@ function PLS.IsFileURL( url )
     return false
 end
 
----@param text string
----@return string[] urls
-local function getUrlsFromText( text )
-    local pattern = "%a+://[%a%d%.-]+:?%d*/?[a-zA-Z0-9%.]*"
-
-    local urls = {}
-    for url in string.gmatch( text, pattern ) do
-        table.insert( urls, url )
-    end
-
-    return urls
-end
-
 ---@param body string
 ---@return string[] urls
 ---@return string|nil error
@@ -70,7 +57,7 @@ function PLS.GetURLSFromData( body )
     if not PLS.allowed then return {}, "pls files are not allowed" end
 
     if #body > PLS.maxFileSize then return {}, "body too large" end
-    local urls = getUrlsFromText( body )
+    local urls = CFCHTTP.FindURLs( body )
 
     local plsData = loadPLSFile( body )
     if not plsData.playlist then
