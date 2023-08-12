@@ -36,8 +36,9 @@ end
 
 local parsedAddressCache = {}
 ---@parm url string
----@return string
+---@return string|nil
 function CFCHTTP.GetAddress( url )
+    if not url then return end
     local cached = parsedAddressCache[url]
     if cached then return cached end
 
@@ -50,4 +51,3 @@ end
 function CFCHTTP.IsAssetURI( url )
     return string.StartWith( url, "asset://" )
 end
-

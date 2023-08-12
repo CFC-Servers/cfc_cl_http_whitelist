@@ -2,14 +2,12 @@ AddCSLuaFile()
 
 ---@alias WhitelistAddressOption { allowed: boolean|nil, noisy: boolean|nil, permanent: boolean|nil }
 
----@class WhitelistConfig 
+---@class WhitelistConfig
 ---@field version string
 ---@field wrapHTMLPanels boolean|nil
 ---@field defaultAssetURIOptions WhitelistAddressOption
 ---@field defaultOptions WhitelistAddressOption
 ---@field addresses table<string, WhitelistAddressOption>
-
----@type WhitelistConfig
 local config = {
     version = "1", -- this field allows backwards compatibility if the config structure is ever updated
 

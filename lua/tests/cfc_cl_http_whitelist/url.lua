@@ -4,6 +4,8 @@ local testUrls = {
     { url = "https://fox.pics:8080/0d875a97-2ab3-489c-b7db-d9d9f026504e.jpg", address = "fox.pics" },
     { url = "https://cfcservers.org", address = "cfcservers.org" },
     { url = "https://24.321.483.222", address = "24.321.483.222" },
+    { url = "nil", address = nil },
+    { url = nil, address = nil },
 }
 
 local htmlBlobs = [[
@@ -28,9 +30,12 @@ return {
                 for _, urlData in pairs( testUrls ) do
                     local html = htmlBlobs:format( urlData.url )
                     local urls = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
-
-                    expect( #urls ).to.equal( 1 )
-                    expect( urls[1] ).to.equal( urlData.url )
+                    if urlData.address then
+                        expect( #urls ).to.equal( 1 )
+                        expect( urls[1] ).to.equal( urlData.url )
+                    else
+                        expect( #urls ).to.equal( 0 )
+                    end
                 end
             end
         },
