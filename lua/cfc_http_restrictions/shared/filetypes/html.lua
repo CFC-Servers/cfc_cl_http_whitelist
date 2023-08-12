@@ -5,10 +5,10 @@ local HTML = {
 }
 CFCHTTP.FileTypes.HTML = HTML
 
--- Not implemented
----@param body string
+---@param _body string
 ---@return boolean
-function HTML.IsFileData( body )
+---@diagnostic disable-next-line: unused-local
+function HTML.IsFileData( _body )
     return false
 end
 
@@ -19,21 +19,10 @@ function HTML.IsFileURL( url )
     return false
 end
 
-local function getUrlsFromText( text )
-    local pattern = "%a+://[%a%d%.-]+:?%d*/?[a-zA-Z0-9%.]*"
-
-    local urls = {}
-    for url in string.gmatch( text, pattern ) do
-        table.insert( urls, url )
-    end
-
-    return urls
-end
-
 ---@param body string
 ---@return string[] urls
 ---@return string|nil error
 function HTML.GetURLSFromData( body )
-    local urls = getUrlsFromText( body )
+    local urls = CFCHTTP.FindURLs( body )
     return urls, nil
 end

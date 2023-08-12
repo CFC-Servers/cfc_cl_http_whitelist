@@ -1,9 +1,17 @@
 AddCSLuaFile()
 
-return {
+---@alias WhitelistAddressOption { allowed: boolean|nil, noisy: boolean|nil, permanent: boolean|nil }
+
+---@class WhitelistConfig
+---@field version string
+---@field wrapHTMLPanels boolean|nil
+---@field defaultAssetURIOptions WhitelistAddressOption
+---@field defaultOptions WhitelistAddressOption
+---@field addresses table<string, WhitelistAddressOption>
+local config = {
     version = "1", -- this field allows backwards compatibility if the config structure is ever updated
 
-    wrapHTMLPanels = false,
+    wrapHTMLPanels = true,
 
     defaultAssetURIOptions = {
         allowed = true
@@ -83,6 +91,7 @@ return {
 
         ["(%w+)%.keybase.pub"] = { allowed = true, pattern = true },
         ["tts.cyzon.us"] = { allowed = true },
-
     }
 }
+
+return config
