@@ -28,10 +28,10 @@ function CFCHTTP.addCSLuaConfigs( dir )
 end
 
 ---@package
----@param file string|nil
-function CFCHTTP.loadDefaultConfg( file )
-    file = file or "cfc_http_restrictions/default_config.lua"
-    CFCHTTP.config = include( file )
+---@param configFile string|nil
+function CFCHTTP.loadDefaultConfg( configFile )
+    configFile = configFile or "cfc_http_restrictions/default_config.lua"
+    CFCHTTP.config = include( configFile )
 end
 
 function CFCHTTP.LoadConfigsClient()
