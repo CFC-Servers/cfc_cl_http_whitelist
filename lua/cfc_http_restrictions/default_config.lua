@@ -15,10 +15,6 @@ return {
         ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
         ["api.steampowered.com"] = { allowed = true },
         ["steamcommunity.com"] = { allowed = true },
         ["developer.valvesoftware.com"] = { allowed = true },
@@ -90,3 +86,4 @@ return {
 
     }
 }
+
