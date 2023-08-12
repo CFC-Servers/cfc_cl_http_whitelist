@@ -1,5 +1,5 @@
 local testUrls = {
-    { url = "http://лиса.рф/static/img/paykeeper.png", address = "лиса.рф" },
+    { url = "http://лиса.рф/static/img/test.png", address = "лиса.рф" },
     { url = "https://store.fox.pics/0d875a97-2ab3-489c-b7db-d9d9f026504e.jpg", address = "store.fox.pics" },
     { url = "https://fox.pics:8080/0d875a97-2ab3-489c-b7db-d9d9f026504e.jpg", address = "fox.pics" },
     { url = "https://cfcservers.org", address = "cfcservers.org" },
