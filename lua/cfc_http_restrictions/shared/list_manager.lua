@@ -8,11 +8,10 @@ function CFCHTTP.getAddress( url )
     local cached = parsedAddressCache[url]
     if cached then return cached end
 
-    local pattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
-    local _, _, _, addr, _ = string.find( url, pattern )
-    parsedAddressCache[url] = addr
+    local data = CFCHTTP.ParseURL( url )
+    parsedAddressCache[url] = data.address
 
-    return addr
+    return data.address
 end
 
 function CFCHTTP.isAssetURI( url )
