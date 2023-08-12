@@ -1,9 +1,9 @@
 CFCHTTP.FileTypes = CFCHTTP.FIleTypes or {}
 
-local files, _ = file.Find( "cfc_http_restrictions/client/filetypes/*.lua", "LUA" )
+local files, _ = file.Find( "cfc_http_restrictions/shared/filetypes/*.lua", "LUA" )
 for _, f in pairs( files ) do
-    include( "cfc_http_restrictions/client/filetypes/" .. f )
-    AddCSLuaFile( "cfc_http_restrictions/client/filetypes/" .. f )
+    include( "cfc_http_restrictions/shared/filetypes/" .. f )
+    AddCSLuaFile( "cfc_http_restrictions/shared/filetypes/" .. f )
 end
 
 ---@param data string
