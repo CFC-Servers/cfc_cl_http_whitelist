@@ -20,7 +20,7 @@ local function logRequest( method, url, fileLocation, allowed, noisy )
     if not url then
         url = "unknown"
     elseif isVerbose == false then
-        local address = CFCHTTP.getAddress( url )
+        local address = CFCHTTP.GetAddress( url )
         if noisy then return end
 
         url = address

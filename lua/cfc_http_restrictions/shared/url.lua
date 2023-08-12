@@ -33,3 +33,21 @@ function CFCHTTP.FindURLs( text )
 
     return urls
 end
+
+local parsedAddressCache = {}
+---@parm url string
+---@return string
+function CFCHTTP.GetAddress( url )
+    local cached = parsedAddressCache[url]
+    if cached then return cached end
+
+    local data = CFCHTTP.ParseURL( url )
+    parsedAddressCache[url] = data.address
+
+    return data.address
+end
+
+function CFCHTTP.IsAssetURI( url )
+    return string.StartWith( url, "asset://" )
+end
+

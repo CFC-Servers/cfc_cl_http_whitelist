@@ -1,23 +1,5 @@
 CFCHTTP = CFCHTTP or {}
 
-
-local parsedAddressCache = {}
----@parm url string
----@return string
-function CFCHTTP.getAddress( url )
-    local cached = parsedAddressCache[url]
-    if cached then return cached end
-
-    local data = CFCHTTP.ParseURL( url )
-    parsedAddressCache[url] = data.address
-
-    return data.address
-end
-
-function CFCHTTP.isAssetURI( url )
-    return string.StartWith( url, "asset://" )
-end
-
 -- escapes all lua pattern characters and allows the use of * as a wildcard
 local escapedCache = {}
 local function escapeAddr( addr )
