@@ -40,7 +40,7 @@ return {
             name = "Get address should return expected data",
             func = function()
                 for _, urlData in pairs( testUrls ) do
-                    local address = CFCHTTP.getAddress( urlData.url )
+                    local address = CFCHTTP.GetAddress( urlData.url )
                     expect( address ).to.equal( urlData.address )
                 end
             end

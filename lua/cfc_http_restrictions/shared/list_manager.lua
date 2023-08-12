@@ -18,9 +18,9 @@ end
 function CFCHTTP.GetOptionsForURL( url )
     if not url then return CFCHTTP.config.defaultOptions end
 
-    if CFCHTTP.isAssetURI( url ) then return CFCHTTP.config.defaultAssetURIOptions end
+    if CFCHTTP.IsAssetURI( url ) then return CFCHTTP.config.defaultAssetURIOptions end
 
-    local address = CFCHTTP.getAddress( url )
+    local address = CFCHTTP.GetAddress( url )
     if not address then return CFCHTTP.config.defaultOptions end
 
     local options = CFCHTTP.config.addresses[address]
