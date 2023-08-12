@@ -8,28 +8,28 @@ end
 
 ---@package
 ---@param dir string|nil
-function CFCHTTP.loadLuaConfigs(dir)
+function CFCHTTP.loadLuaConfigs( dir )
     dir = dir or "cfc_http_restrictions/configs/"
-    local files = file.Find( dir.."*.lua", "LUA" )
+    local files = file.Find( dir .. "*.lua", "LUA" )
     for _, fil in pairs( files ) do
-        local newConfig = include( dir.. fil )
+        local newConfig = include( dir .. fil )
         CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, newConfig )
     end
 end
 
 ---@package
 ---@param dir string|nil
-function CFCHTTP.addCSLuaConfigs(dir)
+function CFCHTTP.addCSLuaConfigs( dir )
     dir = dir or "cfc_http_restrictions/configs/"
-    local files = file.Find( dir.."*.lua", "LUA" )
+    local files = file.Find( dir .. "*.lua", "LUA" )
     for _, fil in pairs( files ) do
-        AddCSLuaFile( dir.. fil )
+        AddCSLuaFile( dir .. fil )
     end
 end
 
 ---@package
 ---@param file string|nil
-function CFCHTTP.loadDefaultConfg(file)
+function CFCHTTP.loadDefaultConfg( file )
     file = file or "cfc_http_restrictions/default_config.lua"
     CFCHTTP.config = include( file )
 end
@@ -37,14 +37,14 @@ end
 function CFCHTTP.LoadConfigsClient()
     CFCHTTP.loadDefaultConfg()
     CFCHTTP.loadLuaConfigs()
-    CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/client/")
+    CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/client/" )
     CFCHTTP.loadClientFileConfig()
 end
 
 function CFCHTTP.LoadConfigsServer()
     CFCHTTP.loadDefaultConfg()
     CFCHTTP.loadLuaConfigs()
-    CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/server/")
+    CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/server/" )
 end
 
 function CFCHTTP.mergeConfigs( old, new )
@@ -89,7 +89,7 @@ if CLIENT then
     CFCHTTP.LoadConfigsClient()
 else
     CFCHTTP.addCSLuaConfigs()
-    CFCHTTP.addCSLuaConfigs( "cfc_http_restrictions/configs/client/")
+    CFCHTTP.addCSLuaConfigs( "cfc_http_restrictions/configs/client/" )
 
     CFCHTTP.LoadConfigsServer()
 end
