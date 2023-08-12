@@ -29,7 +29,8 @@ return {
                     local html = htmlBlobs:format( urlData.url )
                     local urls = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
 
-                    expect( urls ).to.equal( { urlData.url } )
+                    expect( #urls ).to.equal( 1 )
+                    expect( urls[1] ).to.equal( urlData.url )
                 end
             end
         },

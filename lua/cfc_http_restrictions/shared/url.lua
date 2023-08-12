@@ -6,6 +6,7 @@
 
 
 CFCHTTP.URLPattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
+CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" ]*"
 
 ---@param url string
 ---@return URLData
@@ -23,7 +24,7 @@ end
 ---@param text string
 ---@return string[]
 function CFCHTTP.FindURLs( text )
-    local pattern = CFCHTTP.URLPattern
+    local pattern = CFCHTTP.URLPatternNoGroups
 
     local urls = {}
     for url in string.gmatch( text, pattern ) do
