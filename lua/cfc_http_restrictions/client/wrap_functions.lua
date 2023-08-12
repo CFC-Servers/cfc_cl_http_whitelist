@@ -170,6 +170,7 @@ local function wrapHTMLPanel( panelName )
     controlTable.SetHTML = function( self, html, ... )
         local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
         local options = CFCHTTP.GetOptionsForURLs( urls )
+<<<<<<< HEAD
 
         local isAllowed
         if #urls == 0 then
@@ -185,6 +186,23 @@ local function wrapHTMLPanel( panelName )
             html = [[<h1>BLOCKED By CFC HTTP Whitelist</h1>]]
         end
 
+=======
+
+        local isAllowed
+        if #urls == 0 then
+            isAllowed = true
+        else
+            isAllowed = err == nil and options.combined and options.combined.allowed
+        end
+
+        local stack = string.Split( debug.traceback(), "\n" )
+        logRequest( "GET", options.combinedUri, stack[3], isAllowed )
+
+        if not isAllowed then
+            html = [[<h1> BLOCKED </h1>]]
+        end
+
+>>>>>>> main
         return _G[setHTML]( self, html, ... )
     end
 

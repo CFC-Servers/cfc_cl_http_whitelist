@@ -8,7 +8,11 @@ function CFCHTTP.getAddress( url )
     local cached = parsedAddressCache[url]
     if cached then return cached end
 
+<<<<<<< HEAD:lua/cfc_http_restrictions/shared/list_manager.lua
     local pattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
+=======
+    local pattern = "(%a+)://([%a%d%.-]+):?(%d*)/?.*"
+>>>>>>> main:lua/cfc_http_restrictions/client/list_manager.lua
     local _, _, _, addr, _ = string.find( url, pattern )
     parsedAddressCache[url] = addr
 
