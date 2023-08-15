@@ -8,7 +8,7 @@ local function removeByValue( listView, value )
 end
 
 local function populatePanel( form )
-    local warning = vgui.Create( "DLabel"  )
+    local warning = vgui.Create( "DLabel" )
     warning:SetText( "Adding a domain here could expose your ip to other players (and other vulnerabilities)" )
     warning:SetColor( Color( 255, 0, 0 ) )
     warning:SetFont( "GModToolHelp" )
@@ -30,7 +30,7 @@ local function populatePanel( form )
     form:AddItem( list )
 
     for k, v in pairs( CFCHTTP.config.addresses ) do
-        list:AddLine( k, ( v and v.allowed ) and "yes" or "no" )
+        list:AddLine( k, (v and v.allowed) and "yes" or "no" )
     end
 
     local textEntry, _ = form:TextEntry( "Address" )
@@ -67,13 +67,13 @@ local function populatePanel( form )
 
     local save = form:Button( "Save" )
     save.DoClick = function()
-        local conf = CFCHTTP.copyConfig( CFCHTTP.config )
+        local conf = CFCHTTP.CopyConfig( CFCHTTP.config )
         for addr, options in pairs( conf.addresses ) do
             if not options._edited then
                 conf.addresses[addr] = nil
             end
         end
-        CFCHTTP.saveFileConfig( {
+        CFCHTTP.SaveFileConfig( {
             version = "1",
             addresses = conf.addresses
         } )
