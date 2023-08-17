@@ -14,6 +14,7 @@ Configuration load order on client
 - lua/cfc_http_restrictions/configs/*.lua
 - data/cfc_cl_http_whitelist_config.json
 
+
 #### Configuration options
 | name | type | description |
 | ----- | ---- | --------------------------------------------------------------------------------------------------------------------------------- |
