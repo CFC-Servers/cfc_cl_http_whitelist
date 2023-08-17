@@ -22,6 +22,7 @@ local config = {
     addresses = {
         ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
+        ["developer.mozilla.org"] = { allowed = true, noisy = true },
 
         ["api.steampowered.com"] = { allowed = true },
         ["steamcommunity.com"] = { allowed = true },
