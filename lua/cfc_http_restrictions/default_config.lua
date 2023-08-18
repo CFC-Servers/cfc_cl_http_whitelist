@@ -57,13 +57,9 @@ local config = {
 
         ["bitbucket.org"] = { allowed = true },
 
-        ["u.teknik.io"] = { allowed = true },
-
         ["i.imgur.com"] = { allowed = true },
 
         ["pastebin.com"] = { allowed = true },
-
-        ["p.teknik.io"] = { allowed = true },
 
         ["paste.ee"] = { allowed = true },
 
@@ -92,6 +88,22 @@ local config = {
 
         ["(%w+)%.keybase.pub"] = { allowed = true, pattern = true },
         ["tts.cyzon.us"] = { allowed = true },
+
+        -- media player
+        ["samuelmaddock.github.io"] = { allowed = true },
+
+        -- domains starfall docs have that get caught by the html whitelist
+        ["npms.io"] = { allowed = true },
+        ["fb.me"] = { allowed = true },
+        ["reactjs.org"] = { allowed = true },
+        ["www.w3.org"] = { allowed = true },
+        ["www.cplusplus.com"] = { allowed = true },
+        ["wiki.garrysmod.com"] = { allowed = true },
+        ["en.wikipedia.org"] = { allowed = true },
+        ["mydomain.com"] = { allowed = true },
+        ["developer.mozilla.org"] = { allowed = true },
+        ["w3.impa.br"] = { allowed = true },
+
     }
 }
 
