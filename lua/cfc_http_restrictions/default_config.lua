@@ -103,7 +103,7 @@ local config = {
         ["mydomain.com"] = { allowed = true },
         ["developer.mozilla.org"] = { allowed = true },
         ["w3.impa.br"] = { allowed = true },
-
+        ["ccrma.stanford.edu"] = { allowed = true }
     }
 }
 
