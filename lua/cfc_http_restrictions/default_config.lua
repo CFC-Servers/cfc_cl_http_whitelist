@@ -11,7 +11,7 @@ AddCSLuaFile()
 local config = {
     version = "1", -- this field allows backwards compatibility if the config structure is ever updated
 
-    wrapHTMLPanels = true,
+    wrapHTMLPanels = false,
 
     defaultAssetURIOptions = {
         allowed = true
