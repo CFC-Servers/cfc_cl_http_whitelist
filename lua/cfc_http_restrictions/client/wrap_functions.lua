@@ -213,7 +213,9 @@ local function wrapHTMLPanel( panelName )
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed, noisy )
 
-        if not isAllowed then return end
+        if not isAllowed then
+            url = CFCHTTP.GetRedirectURL( url )
+        end
 
         return _G[openURL]( self, url, ... )
     end
