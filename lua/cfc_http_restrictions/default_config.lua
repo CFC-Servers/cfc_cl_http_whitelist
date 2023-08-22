@@ -20,6 +20,9 @@ local config = {
         allowed = false,
     },
     addresses = {
+        -- this is used internally by this addon, removing it could cause issues
+        ["gmhttp.pages.dev"] = { allowed = true, noisy = true, permanent = true },
+
         ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
 
