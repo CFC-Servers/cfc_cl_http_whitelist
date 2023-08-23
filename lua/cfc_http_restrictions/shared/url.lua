@@ -6,7 +6,7 @@
 
 
 CFCHTTP.URLPattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
-CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" ]*"
+CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" \\]*"
 
 ---@param url string
 ---@return URLData
@@ -34,8 +34,23 @@ function CFCHTTP.FindURLs( text )
     return urls
 end
 
+function CFCHTTP.GetRedirectURL( url )
+    url = string.Replace( url, "\n", "" )
+    url = string.Trim( url )
+    local b64 = util.Base64Encode( url, true )
+    return "https://gmhttp.pages.dev/redirect?url=" .. b64
+end
+
+---@param text string
+---@param f fun( url:string ):string
+---@return string
+function CFCHTTP.ReplaceURLs( text, f )
+    local html = string.gsub( text, CFCHTTP.URLPatternNoGroups, f )
+    return html
+end
+
 local parsedAddressCache = {}
----@parm url string
+---@param url string
 ---@return string|nil
 function CFCHTTP.GetAddress( url )
     if not url then return end

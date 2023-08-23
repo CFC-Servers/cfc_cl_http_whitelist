@@ -19,12 +19,11 @@ local htmlBlobs = [[
     </html>
 ]]
 
-return {
+---@type GLuaTestTestGroup
+local group = {
     groupName = "CFC HTTP Whitelist Domains",
     cases = {
         {
-            timeout = 3,
-            async = false,
             name = "Should get addresses from urls",
             func = function()
                 for _, urlData in pairs( testUrls ) do
@@ -40,8 +39,6 @@ return {
             end
         },
         {
-            timeout = 3,
-            async = false,
             name = "Get address should return expected data",
             func = function()
                 for _, urlData in pairs( testUrls ) do
@@ -52,3 +49,5 @@ return {
         },
     }
 }
+
+return group

@@ -168,44 +168,40 @@ local function wrapHTMLPanel( panelName )
     _G[runJavascript] = _G[runJavascript] or controlTable.RunJavascript
 
     controlTable.SetHTML = function( self, html, ... )
-        local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( html )
-        local options = CFCHTTP.GetOptionsForURLs( urls )
-
-        local isAllowed
-        if #urls == 0 then
-            isAllowed = true
-        else
-            isAllowed = err == nil and options.combined and options.combined.allowed
-        end
-
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", options.combinedUri, stack[3], isAllowed )
 
-        if not isAllowed then
-            html = [[<h1>BLOCKED By CFC HTTP Whitelist</h1>]]
-        end
+        html = CFCHTTP.ReplaceURLs( html, function( url )
+            local options = CFCHTTP.GetOptionsForURL( url )
+            local isAllowed = options and options.allowed
+            local noisy = true -- this will be really spammy so set it to noisy by default
+
+            logRequest( "GET", url, stack[3], isAllowed, noisy )
+
+            if not isAllowed then
+                return CFCHTTP.GetRedirectURL( url )
+            end
+
+            return url
+        end )
 
         return _G[setHTML]( self, html, ... )
     end
 
     controlTable.RunJavascript = function( self, js )
-        local urls, err = CFCHTTP.FileTypes.HTML.GetURLSFromData( js )
-        local options = CFCHTTP.GetOptionsForURLs( urls )
-
-        local isAllowed
-        if #urls == 0 then
-            return _G[runJavascript]( self, js )
-        else
-            isAllowed = err == nil and options.combined and options.combined.allowed
-        end
-
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", options.combinedUri, stack[3], isAllowed )
+        js = CFCHTTP.ReplaceURLs( js, function( url )
+            local options = CFCHTTP.GetOptionsForURL( url )
+            local isAllowed = options and options.allowed
+            local noisy = true -- this will be really spammy so set it to noisy by default
 
-        if not isAllowed then
-            return
-        end
+            logRequest( "GET", url, stack[3], isAllowed, noisy )
 
+            if not isAllowed then
+                return CFCHTTP.GetRedirectURL( url )
+            end
+
+            return url
+        end )
         return _G[runJavascript]( self, js )
     end
 
@@ -217,7 +213,9 @@ local function wrapHTMLPanel( panelName )
         local stack = string.Split( debug.traceback(), "\n" )
         logRequest( "GET", url, stack[3], isAllowed, noisy )
 
-        if not isAllowed then return end
+        if not isAllowed then
+            url = CFCHTTP.GetRedirectURL( url )
+        end
 
         return _G[openURL]( self, url, ... )
     end
