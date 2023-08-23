@@ -38,7 +38,7 @@ function CFCHTTP.GetRedirectURL( url )
     url = string.Replace( url, "\n", "" )
     url = string.Trim( url )
     local b64 = util.Base64Encode( url, true )
-    return string.format( "https://gmhttp.pages.dev/redirect?url=%s", b64 )
+    return "https://gmhttp.pages.dev/redirect?url=" .. b64
 end
 
 ---@param text string
