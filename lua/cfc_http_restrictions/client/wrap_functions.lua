@@ -1,44 +1,3 @@
-local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
-local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
-local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", 0, FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
-
-local COLORS = {
-    RED = Color( 255, 0, 0 ),
-    GREEN = Color( 0, 255, 0 ),
-    GREY = Color( 136, 151, 158 ),
-    YELLOW = Color( 235, 226, 52 )
-}
-
-local function logRequest( method, url, fileLocation, allowed, noisy )
-    if allowed and not shouldLogAllows:GetBool() then return end
-    if not shouldLogBlocks:GetBool() then return end
-
-    local isVerbose = verboseLogging:GetBool()
-    local requestStatus = allowed and "ALLOWED" or "BLOCKED"
-    local requestColor = allowed and COLORS.GREEN or COLORS.RED
-
-    if not url then
-        url = "unknown"
-    elseif isVerbose == false then
-        local address = CFCHTTP.GetAddress( url )
-        if noisy then return end
-
-        url = address
-    end
-
-    MsgC(
-        requestColor, requestStatus,
-        COLORS.GREY, ": ",
-        COLORS.YELLOW, method,
-        COLORS.GREY, " - ",
-        COLORS.YELLOW, url, "\n"
-    )
-
-    if isVerbose then
-        MsgC( COLORS.YELLOW, "    ", fileLocation, "\n" )
-    end
-end
-
 local function wrapHTTP()
     _HTTP = _HTTP or HTTP
     print( "HTTP wrapped, original function at '_G._HTTP'" )
@@ -49,7 +8,13 @@ local function wrapHTTP()
         local noisy = options and options.noisy
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( req.method, req.url, stack[3], isAllowed, noisy )
+        CFCHTTP.LogRequest( {
+            noisy = noisy,
+            method = req.method,
+            fileLocation = stack[3],
+            urls = { { url = req.url, status = isAllowed and "allowed" or "blocked" } },
+        } )
+
         local onFailure = req.failed
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
@@ -63,13 +28,20 @@ local function wrapFetch()
     _http_Fetch = _http_Fetch or http.Fetch
     print( "http.Fetch wrapped, original function at '_http_Fetch'" )
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     http.Fetch = function( url, onSuccess, onFailure, headers )
         local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", url, stack[3], isAllowed, noisy )
+        CFCHTTP.LogRequest( {
+            noisy = noisy,
+            method = "GET",
+            fileLocation = stack[3],
+            urls = { { url = url, status = isAllowed and "allowed" or "blocked" } },
+        } )
+
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
@@ -83,13 +55,20 @@ local function wrapPost()
     _http_Post = _http_Post or http.Post
     print( "http.Post wrapped, original function at '_http_Post'" )
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     http.Post = function( url, params, onSuccess, onFailure, headers )
         local options = CFCHTTP.GetOptionsForURL( url )
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "POST", url, stack[3], isAllowed, noisy )
+        CFCHTTP.LogRequest( {
+            noisy = noisy,
+            method = "POST",
+            fileLocation = stack[3],
+            urls = { { url = url, status = isAllowed and "allowed" or "blocked" } },
+        } )
+
         if not isAllowed then
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
@@ -117,8 +96,15 @@ local function wrapPlayURL()
         local isAllowed = options and options.allowed
         local noisy = options and options.noisy
 
+        local logData = {
+            noisy = noisy,
+            method = "GET",
+            fileLocation = stack[3],
+            urls = { { url = url, status = isAllowed and "allowed" or "blocked" } },
+        }
+
         if not isAllowed then
-            logRequest( "GET", url, stack[3], isAllowed, noisy )
+            CFCHTTP.LogRequest( logData )
             if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_URI, "BASS_ERROR_BLOCKED_URI" ) end
             return
         end
@@ -131,15 +117,15 @@ local function wrapPlayURL()
             end
 
             if #uris == 0 then
-                logRequest( "GET", url, stack[3], isAllowed, noisy )
+                CFCHTTP.LogRequest( logData )
                 _sound_PlayURL( url, flags, callback )
                 return
             end
 
-            options = CFCHTTP.GetOptionsForURLs( uris )
-            isAllowed = options.combined.allowed
+            local multiOptions = CFCHTTP.GetOptionsForURLs( uris )
+            isAllowed = multiOptions.combined.allowed
 
-            logRequest( "GET", url, stack[3], isAllowed, noisy )
+            CFCHTTP.LogRequest( logData )
             if not isAllowed then
                 if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
                 return
@@ -170,12 +156,13 @@ local function wrapHTMLPanel( panelName )
     controlTable.SetHTML = function( self, html, ... )
         local stack = string.Split( debug.traceback(), "\n" )
 
+        local logUrls = {}
         html = CFCHTTP.ReplaceURLs( html, function( url )
             local options = CFCHTTP.GetOptionsForURL( url )
             local isAllowed = options and options.allowed
-            local noisy = true -- this will be really spammy so set it to noisy by default
 
-            logRequest( "GET", url, stack[3], isAllowed, noisy )
+            local logUrl = { url = url, status = isAllowed and "allowed" or "replaced" }
+            table.insert( logUrls, logUrl )
 
             if not isAllowed then
                 return CFCHTTP.GetRedirectURL( url )
@@ -183,25 +170,39 @@ local function wrapHTMLPanel( panelName )
 
             return url
         end )
+        CFCHTTP.LogRequest( {
+            noisy = true,
+            method = "GET",
+            fileLocation = stack[3],
+            urls = logUrls,
+        } )
 
         return _G[setHTML]( self, html, ... )
     end
 
     controlTable.RunJavascript = function( self, js )
         local stack = string.Split( debug.traceback(), "\n" )
+        local logUrls = {}
         js = CFCHTTP.ReplaceURLs( js, function( url )
             local options = CFCHTTP.GetOptionsForURL( url )
             local isAllowed = options and options.allowed
-            local noisy = true -- this will be really spammy so set it to noisy by default
 
-            logRequest( "GET", url, stack[3], isAllowed, noisy )
-
+            local logUrl = { url = url, status = isAllowed and "allowed" or "replaced" }
+            table.insert( logUrls, logUrl )
             if not isAllowed then
                 return CFCHTTP.GetRedirectURL( url )
             end
 
             return url
         end )
+
+        CFCHTTP.LogRequest( {
+            noisy = true,
+            method = "GET",
+            fileLocation = stack[3],
+            urls = logUrls,
+        } )
+
         return _G[runJavascript]( self, js )
     end
 
@@ -211,7 +212,12 @@ local function wrapHTMLPanel( panelName )
         local noisy = options and options.noisy
 
         local stack = string.Split( debug.traceback(), "\n" )
-        logRequest( "GET", url, stack[3], isAllowed, noisy )
+        CFCHTTP.LogRequest( {
+            noisy = noisy,
+            method = "GET",
+            fileLocation = stack[3],
+            urls = { { url = url, status = isAllowed and "allowed" or "blocked" } },
+        } )
 
         if not isAllowed then
             url = CFCHTTP.GetRedirectURL( url )

@@ -49,7 +49,9 @@ function CFCHTTP.ReplaceURLs( text, f )
     return html
 end
 
+---@type table<string, string>
 local parsedAddressCache = {}
+
 ---@param url string
 ---@return string|nil
 function CFCHTTP.GetAddress( url )

@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
----@alias WhitelistAddressOption { allowed: boolean|nil, noisy: boolean|nil, permanent: boolean|nil }
+---@alias WhitelistAddressOption { allowed: boolean|nil, noisy: boolean|nil, permanent: boolean|nil, pattern: boolean|nil }
 
 ---@class WhitelistConfig
 ---@field version string

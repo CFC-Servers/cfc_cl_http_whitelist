@@ -47,11 +47,14 @@ function CFCHTTP.LoadConfigsServer()
     CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/server/" )
 end
 
+---@param old any
+---@param new WhitelistConfig
+---@return WhitelistConfig
 function CFCHTTP.mergeConfigs( old, new )
     if new.version == "1" then
         if new.wrapHTMLPanels ~= nil then old.wrapHTMLPanels = new.wrapHTMLPanels end
         if new.defaultOptions ~= nil then old.defaultOptions = new.defaultOptions end
-        if new.defaultAssetURIOption ~= nil then old.defaultAssetURIOption = new.defaultAssetURIOption end
+        if new.defaultAssetURIOptions ~= nil then old.defaultAssetURIOptions = new.defaultAssetURIOptions end
 
         for domain, options in pairs( new.addresses ) do
             local currentOptions = old.addresses[domain]
@@ -68,19 +71,23 @@ function CFCHTTP.mergeConfigs( old, new )
     return old
 end
 
+---@param cfg WhitelistConfig
+---@return WhitelistConfig
 function CFCHTTP.CopyConfig( cfg )
     return util.JSONToTable( util.TableToJSON( cfg ) )
 end
 
+---@param config WhitelistConfig
 function CFCHTTP.SaveFileConfig( config )
     file.Write( "cfc_cl_http_whitelist_config.json", util.TableToJSON( config, true ) )
 
     notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
 end
 
+---@return WhitelistConfig|nil
 function CFCHTTP.ReadFileConfig()
     local fileData = file.Read( "cfc_cl_http_whitelist_config.json" )
-    if not fileData then return end
+    if not fileData then return nil end
 
     return util.JSONToTable( fileData )
 end

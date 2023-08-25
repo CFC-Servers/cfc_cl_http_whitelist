@@ -1,3 +1,5 @@
+---@param listView DListView
+---@param value string
 local function removeByValue( listView, value )
     for i, line in pairs( listView:GetLines() ) do
         if line:GetValue( 1 ) == value then
@@ -48,7 +50,7 @@ local function populatePanel( form )
         list:AddLine( v, "yes" )
     end
 
-    local block = form:Button( "Block" )
+    local block = form:Button( "Block", "" )
     block.DoClick = function()
         local v = textEntry:GetValue()
         if not CFCHTTP.blockAddress( v ) then return end
