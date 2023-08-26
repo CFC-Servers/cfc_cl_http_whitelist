@@ -13,7 +13,9 @@ function CFCHTTP.loadLuaConfigs( dir )
     local files = file.Find( dir .. "*.lua", "LUA" )
     for _, fil in pairs( files ) do
         local newConfig = include( dir .. fil )
-        CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, newConfig )
+        if newConfig then
+            CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, newConfig )
+        end
     end
 end
 
