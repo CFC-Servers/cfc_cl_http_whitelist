@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
----@alias WhitelistAddressOption { allowed: boolean|nil, noisy: boolean|nil, permanent: boolean|nil }
+---@alias WhitelistAddressOption { allowed: boolean|nil, noisy: boolean|nil, permanent: boolean|nil, pattern: boolean|nil }
 
 ---@class WhitelistConfig
 ---@field version string
@@ -34,7 +34,6 @@ local config = {
 
         ["api.github.com"] = { allowed = true },
         ["github.com"] = { allowed = true },
-        ["thegrb93.github.io"] = { allowed = true },
 
         -- dropbox
         ["dl.dropboxusercontent.com"] = { allowed = true },
@@ -91,9 +90,6 @@ local config = {
 
         ["(%w+)%.keybase.pub"] = { allowed = true, pattern = true },
         ["tts.cyzon.us"] = { allowed = true },
-
-        -- media player
-        ["samuelmaddock.github.io"] = { allowed = true },
 
         ["wiki.garrysmod.com"] = { allowed = true },
         ["en.wikipedia.org"] = { allowed = true },
