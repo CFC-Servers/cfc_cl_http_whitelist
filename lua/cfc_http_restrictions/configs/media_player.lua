@@ -1,5 +1,4 @@
----@diagnostic disable-next-line: undefined-global
-if not MediaPlayer then return end
+if not file.Exists("entities/mediaplayer_tv", "LUA") then return end
 
 AddCSLuaFile()
 
