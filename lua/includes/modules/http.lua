@@ -13,7 +13,7 @@ if CLIENT then
 
     print( "Running original http.lua" )
     f()
-elseif SERVER then
-    print( "Running wrapped http.lua" )
-    f()
 end
+
+print( "Running wrapped http.lua" )
+f()
