@@ -8,11 +8,12 @@ originalFile:Close()
 local f = CompileString( code, "lua/includes/modules/http.lua", false )
 
 if CLIENT then
-    include( "cfc_http_restrictions/wraps/http.lua" )
-    include( "cfc_http_restrictions/wraps/playURL.lua" )
-
-    print( "Running original http.lua" )
-    f()
+    ProtectedCall( function()
+        include( "cfc_http_restrictions/wraps/http.lua" )
+    end )
+    ProtectedCall( function()
+        include( "cfc_http_restrictions/wraps/playURL.lua" )
+    end )
 end
 
 print( "Running wrapped http.lua" )
