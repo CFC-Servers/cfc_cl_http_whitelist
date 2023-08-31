@@ -6,9 +6,9 @@ local COLORS = {
     YELLOW = Color( 235, 226, 52 )
 }
 
-local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
-local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", 1, FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
-local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", 0, FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
+local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", "1", FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
+local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", "1", FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
+local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", "0", FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
 
 local statusColors = {
     ALLOWED = COLORS.GREEN,
@@ -60,17 +60,7 @@ function CFCHTTP.LogRequest( input )
         local requestStatus = string.upper( v.status ) or "UNKNOWN"
         local requestColor = statusColors[requestStatus] or COLORS.GREY
 
-        table.insert( msg, requestColor )
-        table.insert( msg, "\t" .. requestStatus )
-        table.insert( msg, COLORS.GREY )
-        table.insert( msg, ": " )
-        table.insert( msg, COLORS.YELLOW )
-        table.insert( msg, input.method )
-        table.insert( msg, COLORS.GREY )
-        table.insert( msg, " - " )
-        table.insert( msg, COLORS.YELLOW )
-        table.insert( msg, url )
-        table.insert( msg, "\n" )
+        table.Add( msg, { requestColor, "\t", requestStatus, COLORS.GREY, ": ", COLORS.YELLOW, input.method, COLORS.GREY, " - ", COLORS.YELLOW, url, "\n" } )
     end
 
     MsgC( unpack( msg ) )
