@@ -1,4 +1,4 @@
-CFCHTTP.FileTypes = CFCHTTP.FIleTypes or {}
+CFCHTTP.FileTypes = CFCHTTP.FileTypes or {}
 
 local files, _ = file.Find( "cfc_http_restrictions/shared/filetypes/*.lua", "LUA" )
 for _, f in pairs( files ) do
