@@ -4,6 +4,6 @@ hook.Add( "WA_IsWhitelistedURL", "CFC_HTTP_ShouldAllow", function( url )
     return options.allowed
 end )
 
-hook.Add( "WA_ShouldCheckStreamContent", "CFC_HTTP_ShouldCheckStreamContent", function( url )
+hook.Add( "WA_ShouldCheckStreamContent", "CFC_HTTP_ShouldCheckStreamContent", function( _ )
     return false
 end )
