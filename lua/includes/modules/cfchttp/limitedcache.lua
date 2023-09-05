@@ -7,6 +7,8 @@
 ---@field private last number
 local cacheIndex = {}
 
+---@param key string
+---@param value any
 function cacheIndex:Set( key, value )
     self:pruneQueue()
 
@@ -20,6 +22,8 @@ function cacheIndex:Set( key, value )
     self:pushRight( v )
 end
 
+---@param key string
+---@return any
 function cacheIndex:Get( key )
     local v = self.data[key]
     if v then
