@@ -1,6 +1,6 @@
 ---@class LimitedCache
----@field private data table<string, any>
----@field private queue table<number, any>
+---@field private data table<string, {key: string, value: any, created: number}>
+---@field private queue table<number, {key: string, value: any, created: number}>
 ---@field private limit number
 ---@field private ttlSeconds number
 ---@field private first number
