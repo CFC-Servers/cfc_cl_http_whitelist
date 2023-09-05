@@ -21,8 +21,6 @@ function cacheIndex:Set( key, value )
 end
 
 function cacheIndex:Get( key )
-    self:pruneQueue()
-
     local v = self.data[key]
     if v then
         return v.value
