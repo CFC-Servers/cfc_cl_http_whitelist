@@ -59,7 +59,7 @@ function CFCHTTP.ReplaceURLs( text, f )
     return html
 end
 
-local parsedAddressCache = {}
+local parsedAddressCache = CFCHTTP.LimitedCache.New( 1000, 60 * 60 )
 ---@param url string
 ---@return string|nil
 function CFCHTTP.GetAddress( url )
