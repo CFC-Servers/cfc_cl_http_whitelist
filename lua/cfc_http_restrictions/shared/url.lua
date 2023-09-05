@@ -64,11 +64,11 @@ local parsedAddressCache = CFCHTTP.LimitedCache.New( 1000, 60 * 60 )
 ---@return string|nil
 function CFCHTTP.GetAddress( url )
     if not url then return end
-    local cached = parsedAddressCache[url]
+    local cached = parsedAddressCache:Get( url )
     if cached then return cached end
 
     local data = CFCHTTP.ParseURL( url )
-    parsedAddressCache[url] = data.address
+    parsedAddressCache:Set( url, data.address )
 
     return data.address
 end
