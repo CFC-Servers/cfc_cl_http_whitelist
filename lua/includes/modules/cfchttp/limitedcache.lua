@@ -8,7 +8,7 @@
 local cacheIndex = {}
 
 function cacheIndex:Set( key, value )
-    self:groomQueue()
+    self:pruneQueue()
 
     local v = {
         key = key,
@@ -21,7 +21,7 @@ function cacheIndex:Set( key, value )
 end
 
 function cacheIndex:Get( key )
-    self:groomQueue()
+    self:pruneQueue()
 
     local v = self.data[key]
     if v then
@@ -35,7 +35,7 @@ function cacheIndex:pushRight( value )
     self.queue[last] = value
 end
 
-function cacheIndex:groomQueue()
+function cacheIndex:pruneQueue()
     local amountOverLimit = self.last - self.first - self.limit
 
     for i = self.first, self.last do
