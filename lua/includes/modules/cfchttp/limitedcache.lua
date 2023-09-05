@@ -38,19 +38,12 @@ function cacheIndex:pruneQueue()
 
     for i = self.first, self.last do
         local v = self.queue[i]
-        if os.time() - v.created > self.ttlSeconds then
-            self.queue[i] = nil
-            self.data[v.key] = nil
-            self.first = self.first + 1
-            amountOverLimit = amountOverLimit - 1
-        elseif amountOverLimit > 0 then
-            self.queue[i] = nil
-            self.data[v.key] = nil
-            self.first = self.first + 1
-            amountOverLimit = amountOverLimit - 1
-        else
+        if os.time() - v.created <= self.ttlSeconds and amountOverLimit <= 0 then
             break
         end
+        self.queue[i] = nil
+        self.data[v.key] = nil
+        self.first = self.first + 1
         amountOverLimit = amountOverLimit - 1
     end
 end
