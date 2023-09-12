@@ -60,7 +60,7 @@ function CFCHTTP.LogRequest( input )
         return
     end
 
-    local msg = { COLORS.YELLOW, tostring( #input.urls ), " urs filtered:\n", COLORS.YELLOW, "  ", input.fileLocation, "\n" }
+    local msg = { COLORS.YELLOW, tostring( #input.urls ), " urls filtered:\n", COLORS.YELLOW, "  ", input.fileLocation, "\n" }
     for _, v in pairs( input.urls or {} ) do
         local url = v.url
         local reason = v.reason or ""
