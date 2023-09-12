@@ -22,3 +22,5 @@ includeShared( "cfc_http_restrictions/shared/url.lua" )
 
 includeClient( "cfc_http_restrictions/client/list_view.lua" )
 includeClient( "cfc_http_restrictions/client/wrap_functions.lua" )
+
+includeClient( "cfc_http_restrictions/client/integrations.lua")
