@@ -42,32 +42,6 @@ function CFCHTTP.GetOptionsForURL( url )
     return CFCHTTP.config.defaultOptions
 end
 
---- Returns the options for a list of URLs
----@param urls string[]
----@return {options: table<string, table>, combined: table|nil, combinedUri: string|nil}
-function CFCHTTP.GetOptionsForURLs( urls )
-    local out = {
-        combined = nil,
-        options = {},
-    }
-    for _, url in pairs( urls ) do
-        local options = CFCHTTP.GetOptionsForURL( url )
-        out.options[url] = options
-        if options and not options.allowed then
-            out.combined = options
-            out.combinedUri = url
-        elseif not out.combined then
-            out.combined = options
-            out.combinedUri = url
-        end
-    end
-    if out.combined == nil then
-        out.combined = CFCHTTP.config.defaultOptions
-    end
-
-    return out
-end
-
 -- file based config functions
 function CFCHTTP.allowAddress( addr )
     if CFCHTTP.config.addresses[addr] ~= nil and CFCHTTP.config.addresses[addr].permanent then

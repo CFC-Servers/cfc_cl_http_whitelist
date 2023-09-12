@@ -29,17 +29,10 @@ function CFCHTTP.GetFileDataURLS( url, callback )
         local filetype = CFCHTTP.getFileType( body )
         if filetype then
             local urls, err = filetype.GetURLSFromData( body )
-            if err then
-                callback( {}, err )
-            else
-                if #urls == 0 then
-                    callback( {}, "No URLs found in file" )
-                    return
-                end
-                callback( urls, nil )
-            end
+            callback( urls, err )
         else
-            callback( {}, nil )
+            local urls = CFCHTTP.FindURLs( body )
+            callback( urls, nil )
         end
     end )
 end
