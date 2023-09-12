@@ -15,6 +15,7 @@ local function includeShared( f )
     include( f )
 end
 
+includeShared( "cfc_http_restrictions/shared/logging.lua" )
 includeShared( "cfc_http_restrictions/shared/config_loader.lua" )
 includeShared( "cfc_http_restrictions/shared/filetypes.lua" )
 includeShared( "cfc_http_restrictions/shared/list_manager.lua" )

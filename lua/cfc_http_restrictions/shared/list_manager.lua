@@ -14,7 +14,8 @@ local function escapeAddr( addr )
     return escapedCache[addr]
 end
 
--- TODO reimmplement caching
+---@param url string
+---@return WhitelistAddressOption
 function CFCHTTP.GetOptionsForURL( url )
     if not url then return CFCHTTP.config.defaultOptions end
 
