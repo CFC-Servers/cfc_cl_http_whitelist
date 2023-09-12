@@ -37,7 +37,9 @@ function CFCHTTP.LogRequest( input )
 
     if #input.urls == 1 then
         local url = input.urls[1].url
+
         local reason = input.urls[1].reason
+
         local requestStatus = string.upper( input.urls[1].status ) or "UNKNOWN"
         local requestColor = statusColors[requestStatus] or COLORS.GREY
         if not shouldLogAllows:GetBool() and requestStatus == "ALLOWED" then return end

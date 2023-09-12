@@ -34,10 +34,20 @@ function CFCHTTP.FindURLs( text )
     return urls
 end
 
+---@param url string
+---@return string
+function CFCHTTP.URLEncode( url )
+    url = url:gsub( "[^%w ]", function( c )
+        return string.format( "%%%02X", string.byte( c ) )
+    end )
+    return url
+end
+
 function CFCHTTP.GetRedirectURL( url )
     url = string.Replace( url, "\n", "" )
     url = string.Trim( url )
-    local b64 = util.Base64Encode( url, true )
+    local b64 = CFCHTTP.URLEncode( url )
+
     return "https://gmhttp.pages.dev/redirect?url=" .. b64
 end
 
