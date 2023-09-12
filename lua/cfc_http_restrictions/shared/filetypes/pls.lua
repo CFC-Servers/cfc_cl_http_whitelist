@@ -6,36 +6,6 @@ CFCHTTP.FileTypes.PLS = {
 }
 local PLS = CFCHTTP.FileTypes.PLS
 
-
----@param body string
----@return table data
-local function loadPLSFile( body )
-    body = string.Replace( body, "\r\n", "\n" )
-    body = string.Replace( body, "\r", "\n" )
-
-    local lines = string.Split( body, "\n" )
-    local section;
-    local data = {}
-
-    for _, line in ipairs( lines ) do
-        local tempSection = line:match( "^%[([^%[%]]+)%]$" );
-        if tempSection then
-            section = tonumber( tempSection ) and tonumber( tempSection ) or tempSection;
-            data[section] = data[section] or {};
-        end
-
-        local param, value = line:match( "^([%w|_]+)%s-=%s-(.+)$" );
-        if param and value ~= nil then
-            if tonumber( value ) then
-                value = tonumber( value );
-            end
-            data[section][param] = value;
-        end
-    end
-
-    return data;
-end
-
 ---@param body string
 ---@return boolean
 function PLS.IsFileData( body )
@@ -50,28 +20,12 @@ function PLS.IsFileURL( url )
     return false
 end
 
----@param body string
+---@param _body string
 ---@return string[] urls
 ---@return string|nil error
-function PLS.GetURLSFromData( body )
-    if not PLS.allowed then return {}, "pls files are not allowed" end
-
-    if #body > PLS.maxFileSize then return {}, "body too large" end
-    local urls = CFCHTTP.FindURLs( body )
-
-    local plsData = loadPLSFile( body )
-    if not plsData.playlist then
-        return urls, "no playlist section"
-    end
-
-    for i = 1, 150 do
-        local f = plsData.playlist["File" .. i]
-        if not f then
-            return urls, nil
-        end
-        table.insert( urls, f )
-    end
-    return urls, "too many files"
+---@diagnostic disable-next-line: unused-local
+function PLS.GetURLSFromData( _body )
+    return {}, "pls files are not allowed"
 end
 
 return PLS

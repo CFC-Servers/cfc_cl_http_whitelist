@@ -33,27 +33,25 @@ local function wrapPlayURL()
 
         CFCHTTP.GetFileDataURLS( url, function( uris, err )
             if err ~= nil then
-                print( "Error getting URLs: " .. err )
+                logData.urls[1].status = "blocked"
+                logData.urls[1].reason = err
+
+                CFCHTTP.LogRequest( logData )
                 if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
                 return
             end
-
             if #uris == 0 then
                 CFCHTTP.LogRequest( logData )
                 _sound_PlayURL( url, flags, callback )
                 return
             end
 
-            local multiOptions = CFCHTTP.GetOptionsForURLs( uris )
-            isAllowed = multiOptions.combined.allowed
+            isAllowed = false
+            logData.urls[1].status = "blocked"
+            logData.urls[1].reason = "cant load files containing urls"
 
             CFCHTTP.LogRequest( logData )
-            if not isAllowed then
-                if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
-                return
-            end
-
-            _sound_PlayURL( url, flags, callback )
+            if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
         end )
     end
 end

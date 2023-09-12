@@ -26,7 +26,7 @@ end
 ---@return string[] urls
 ---@return string|nil error
 function M3U.GetURLSFromData( _ )
-    return {}, "m3u parsing not implemented"
+    return {}, "m3u files are not allowed"
 end
 
 return M3U
