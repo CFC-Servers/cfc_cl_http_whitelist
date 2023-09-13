@@ -31,12 +31,15 @@ local function wrapHTMLPanel( panelName )
 
             return url
         end )
-        CFCHTTP.LogRequest( {
-            noisy = true,
-            method = "GET",
-            fileLocation = stack[3],
-            urls = logUrls,
-        } )
+
+        if #logUrls > 0 then
+            CFCHTTP.LogRequest( {
+                noisy = true,
+                method = "GET",
+                fileLocation = stack[3],
+                urls = logUrls,
+            } )
+        end
 
         return _G[setHTML]( self, html, ... )
     end
@@ -57,12 +60,14 @@ local function wrapHTMLPanel( panelName )
             return url
         end )
 
-        CFCHTTP.LogRequest( {
-            noisy = true,
-            method = "GET",
-            fileLocation = stack[3],
-            urls = logUrls,
-        } )
+        if #logUrls > 0 then
+            CFCHTTP.LogRequest( {
+                noisy = true,
+                method = "GET",
+                fileLocation = stack[3],
+                urls = logUrls,
+            } )
+        end
 
         return _G[runJavascript]( self, js )
     end
