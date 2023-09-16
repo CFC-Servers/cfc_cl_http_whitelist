@@ -1,7 +1,5 @@
 CFCHTTP.FileTypes.ID3 = {
     name = "ID3",
-    allowed = true,
-    maxFileSize = 0,
 }
 local ID3 = CFCHTTP.FileTypes.ID3
 

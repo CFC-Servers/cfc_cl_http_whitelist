@@ -1,8 +1,6 @@
 CFCHTTP.FileTypes.PLS = {
     name = "PLS",
-    allowed = false,
     extension = ".pls",
-    maxFileSize = 10000,
 }
 local PLS = CFCHTTP.FileTypes.PLS
 

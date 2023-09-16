@@ -1,7 +1,6 @@
 local HTML = {
     name = "HTML",
     extension = "html",
-    maxFileSize = 0,
 }
 CFCHTTP.FileTypes.HTML = HTML
 

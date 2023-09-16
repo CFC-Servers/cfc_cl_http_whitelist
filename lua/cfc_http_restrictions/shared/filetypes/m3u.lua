@@ -1,8 +1,6 @@
 CFCHTTP.FileTypes.M3U = {
     name = "M3U",
-    allowed = false,
     extension = "m3u",
-    maxFileSize = 0,
 }
 local M3U = CFCHTTP.FileTypes.M3U
 
