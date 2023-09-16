@@ -59,18 +59,11 @@ function CFCHTTP.ReplaceURLs( text, f )
     return html
 end
 
----@type table<string, string>
-local parsedAddressCache = {}
-
 ---@param url string
 ---@return string|nil
 function CFCHTTP.GetAddress( url )
     if not url then return end
-    local cached = parsedAddressCache[url]
-    if cached then return cached end
-
     local data = CFCHTTP.ParseURL( url )
-    parsedAddressCache[url] = data.address
 
     return data.address
 end
