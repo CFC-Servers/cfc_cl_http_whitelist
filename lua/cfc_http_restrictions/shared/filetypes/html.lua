@@ -1,7 +1,6 @@
 local HTML = {
     name = "HTML",
     extension = "html",
-    maxFileSize = 0,
 }
 CFCHTTP.FileTypes.HTML = HTML
 
@@ -9,13 +8,6 @@ CFCHTTP.FileTypes.HTML = HTML
 ---@return boolean
 ---@diagnostic disable-next-line: unused-local
 function HTML.IsFileData( _body )
-    return false
-end
-
----@param url string
----@return boolean
-function HTML.IsFileURL( url )
-    if string.EndsWith( url, "." .. HTML.extension ) then return true end
     return false
 end
 

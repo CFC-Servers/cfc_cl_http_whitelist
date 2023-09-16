@@ -1,8 +1,6 @@
 CFCHTTP.FileTypes.PLS = {
     name = "PLS",
-    allowed = false,
     extension = ".pls",
-    maxFileSize = 10000,
 }
 local PLS = CFCHTTP.FileTypes.PLS
 
@@ -10,13 +8,6 @@ local PLS = CFCHTTP.FileTypes.PLS
 ---@return boolean
 function PLS.IsFileData( body )
     if string.find( body, "[playlist]", 1, true ) then return true end
-    return false
-end
-
----@param url string
----@return boolean
-function PLS.IsFileURL( url )
-    if string.EndsWith( url, "." .. PLS.extension ) then return true end
     return false
 end
 
