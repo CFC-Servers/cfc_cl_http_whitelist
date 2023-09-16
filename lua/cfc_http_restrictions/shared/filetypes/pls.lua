@@ -13,13 +13,6 @@ function PLS.IsFileData( body )
     return false
 end
 
----@param url string
----@return boolean
-function PLS.IsFileURL( url )
-    if string.EndsWith( url, "." .. PLS.extension ) then return true end
-    return false
-end
-
 ---@param _body string
 ---@return string[] urls
 ---@return string|nil error

@@ -15,13 +15,6 @@ function M3U.IsFileData( body )
     return false
 end
 
----@param url string
----@return boolean
-function M3U.IsFileURL( url )
-    if string.EndsWith( url, "." .. M3U.extension ) then return true end
-    return false
-end
-
 ---@param _ string
 ---@return string[] urls
 ---@return string|nil error

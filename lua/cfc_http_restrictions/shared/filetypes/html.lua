@@ -12,13 +12,6 @@ function HTML.IsFileData( _body )
     return false
 end
 
----@param url string
----@return boolean
-function HTML.IsFileURL( url )
-    if string.EndsWith( url, "." .. HTML.extension ) then return true end
-    return false
-end
-
 ---@param body string
 ---@return string[] urls
 ---@return string|nil error
