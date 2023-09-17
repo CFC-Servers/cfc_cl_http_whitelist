@@ -94,7 +94,7 @@ local config = {
         ["wiki.garrysmod.com"] = { allowed = true },
         ["en.wikipedia.org"] = { allowed = true },
         ["developer.mozilla.org"] = { allowed = true },
-    }
+    },
 }
 
 return config
