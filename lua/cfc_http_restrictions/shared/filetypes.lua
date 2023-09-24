@@ -18,11 +18,11 @@ function CFCHTTP.getFileType( data )
 end
 
 ---@param url string
----@param callback fun( urls: string[], err: string|nil)
+---@param callback fun( urls: string[], err: string|nil, code )
 function CFCHTTP.GetFileDataURLS( url, callback )
     http.Fetch( url, function( body, _, _, code )
         if code < 200 or code > 299 then
-            callback( {}, "HTTP request returned status code " .. code )
+            callback( {}, "HTTP request returned status code " .. code, code )
             return
         end
 

@@ -31,13 +31,22 @@ local function wrapPlayURL()
             return
         end
 
-        CFCHTTP.GetFileDataURLS( url, function( uris, err )
+        CFCHTTP.GetFileDataURLS( url, function( uris, err, code )
             if err ~= nil then
                 logData.urls[1].status = "blocked"
                 logData.urls[1].reason = err
 
                 CFCHTTP.LogRequest( logData )
-                if callback then callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" ) end
+                code = code or 0
+                if callback then
+                    if code == 401 or code == 403 then
+                        callback( nil, 49, "BASS_ERROR_DENIED" )
+                    elseif code == 404 then
+                        callback( nil, 2, "BASS_ERROR_FILEOPEN" )
+                    else
+                        callback( nil, CFCHTTP.BASS_ERROR_BLOCKED_CONTENT, "BASS_ERROR_BLOCKED_CONTENT" )
+                    end
+                end
                 return
             end
             if #uris == 0 then
