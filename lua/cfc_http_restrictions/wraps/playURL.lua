@@ -37,7 +37,6 @@ local function wrapPlayURL()
                 logData.urls[1].reason = err
 
                 CFCHTTP.LogRequest( logData )
-                code = code or 0
                 if callback then
                     if code == 401 or code == 403 then
                         callback( nil, 49, "BASS_ERROR_DENIED" )
