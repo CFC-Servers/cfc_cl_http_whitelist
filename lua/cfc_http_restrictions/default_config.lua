@@ -49,6 +49,7 @@ local config = {
         ["drive.google.com"] = { allowed = true },
 
         -- youtube
+        ["www.youtube.com"] = { allowed = true },
         ["youtube.com"] = { allowed = true },
         ["youtu.be"] = { allowed = true },
 
