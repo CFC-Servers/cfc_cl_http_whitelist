@@ -1,4 +1,4 @@
-local function wrapHTMLPanel( panelName, errorOnMissing )
+local function wrapHTMLPanel( panelName )
     print( "Wrapping SetHTML and OpenURL for " .. panelName )
     local funcName = function( functionName )
         return "_" .. panelName .. "_" .. functionName
