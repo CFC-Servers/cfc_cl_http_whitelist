@@ -1,4 +1,4 @@
-local function wrapHTMLPanel( panelName )
+local function wrapHTMLPanel( panelName, errorOnMissing )
     print( "Wrapping SetHTML and OpenURL for " .. panelName )
     local funcName = function( functionName )
         return "_" .. panelName .. "_" .. functionName
@@ -95,4 +95,7 @@ end
 
 wrapHTMLPanel( "DHTML" )
 wrapHTMLPanel( "DPanel" )
-wrapHTMLPanel( "DMediaPlayerHTML" )
+
+if file.Exists( "entities/mediaplayer_tv", "LUA" ) then
+    wrapHTMLPanel( "DMediaPlayerHTML" )
+end
