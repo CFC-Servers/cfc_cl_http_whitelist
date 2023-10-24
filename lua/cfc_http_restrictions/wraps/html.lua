@@ -95,4 +95,7 @@ end
 
 wrapHTMLPanel( "DHTML" )
 wrapHTMLPanel( "DPanel" )
-wrapHTMLPanel( "DMediaPlayerHTML" )
+
+if file.Exists( "entities/mediaplayer_tv", "LUA" ) then
+    wrapHTMLPanel( "DMediaPlayerHTML" )
+end
