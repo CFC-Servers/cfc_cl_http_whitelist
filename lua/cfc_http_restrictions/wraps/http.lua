@@ -20,7 +20,7 @@ local function wrapHTTP()
             if onFailure then onFailure( "URL is not whitelisted" ) end
             return
         end
-        _HTTP( req )
+        return _HTTP( req )
     end
 end
 wrapHTTP()
