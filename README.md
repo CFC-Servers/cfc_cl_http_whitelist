@@ -1,28 +1,40 @@
 # cfc_cl_http_whitelist
 Attempts to block any http request on clients that are not in the defined whitelist
 
+* [Configuring](#configuring)
+  * [How it works](#how-it-works)
+  * [Configuring your server](#configuring-your-server)
+  * [Client convars](#clientside-convars)
 
-## Configuring 
-You can create a file in `lua/cfc_http_restrictions/configs` to add your own default domains to your server.
-e.g. `lua/cfc_http_restrictions/config/myserver_config.lua`. See [CFC's Whitelist config addon](https://github.com/CFC-Servers/cfc_cl_http_whitelist_configs) for an exmaple
-
-Configuration is loaded from lua files and a data file on in the clients data folder
-Each config thats loaded will overwrite values in the previous config, unless permanent=true is set on that config option
+# Configuring 
+## How it works
+Clients are allowed to allow or deny urls for their clientside whitelist using the options menu in sandbox. Before loading the clientside editable config defaults are loaded from lua files or networked from the server.
+Configs are layered so one config doesnt not completely overwrite an earlier config, just adds to it and overwrites any conflicting addresses (unless they are set to permanent)
 
 Configuration load order on client
-- lua/cfc_http_retrictions/default_config.lua
-- lua/cfc_http_restrictions/configs/*.lua
-- data/cfc_cl_http_whitelist_config.json
+- Loads default config from `lua/cfc_http_retrictions/default_config.lua`
+- Loasd additional configs from `lua/cfc_http_restrictions/configs/*.lua`
+- Loads additional configs from lua/cfc_http_restrictions/configs/client/*.lua`
+- Loads networked config if it exists
+- Loads clientside config from `data/cfc_cl_http_whitelist_config.json`
 
-#### Configuration options
+## Configuring your server
+The best way to configure your server is using lua files. 
+- do NOT edit default_config.lua or any other file in this addon to change the config, this will make updating to get bug fixes and security fixes more difficult 
+- Fork or copy the template repo found here https://github.com/cfc-servers/cfc_http_whitelist_config_template
+- Modify the repo to allow or deny any domains you need. See [Configuration Options] for a list of options you can use in your address config 
+- Put that repo in the addons folder on your server
+
+
+## Configuration options
 | name | type | description |
 | ----- | ---- | --------------------------------------------------------------------------------------------------------------------------------- |
 | noisy | bool | mark the domain as noisy, hiding it from logs, this can be used for internal domains that will be called frequently on the client |
 | allowed|bool| Is the domain allowed, if false block the domain, if true allow the domain |
-|permanent|bool|Is the domain permanent, if true the domain can not be removed by the users own config|
-|_edited|bool|DO NOT SET, internal field used to track if a config option has been edited by the client|
+|permanent|bool|Is the domain permanent, if true the domain can not be removed from the config| 
+|pattern|bool|Should the address be treated as a lua pattern|
 
-#### Clientside Convars
+## Clientside Convars
 | name | default | description |
 | ---- | ------- | ----------- |
 | cfc_http_restrictions_log_allows | 1 | Should log allowed HTTP requests? |
