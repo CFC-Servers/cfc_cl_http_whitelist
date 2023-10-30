@@ -9,6 +9,17 @@ local function removeByValue( listView, value )
     end
 end
 
+function CFCHTTP.repopulateListPanel()
+    local list = CFCHTTP.listPanel
+    if not IsValid( list ) then return end
+
+    list:Clear()
+
+    for k, v in pairs( CFCHTTP.config.addresses ) do
+        list:AddLine( k, (v and v.allowed) and "yes" or "no" )
+    end
+end
+
 local function populatePanel( form )
     local warning = vgui.Create( "DLabel" )
     warning:SetText( "Adding a domain here could expose your ip to other players (and other vulnerabilities)" )
@@ -30,6 +41,7 @@ local function populatePanel( form )
     list:AddColumn( "Allowed" )
     list:SetTall( 300 )
     form:AddItem( list )
+    CFCHTTP.listPanel = list
 
     for k, v in pairs( CFCHTTP.config.addresses ) do
         list:AddLine( k, (v and v.allowed) and "yes" or "no" )
@@ -37,6 +49,7 @@ local function populatePanel( form )
 
     local textEntry, _ = form:TextEntry( "Address" )
 
+    ---@diagnostic disable-next-line: inject-field
     list.OnRowSelected = function( _, _, pnl )
         textEntry:SetValue( pnl:GetColumnText( 1 ) )
     end
@@ -75,7 +88,7 @@ local function populatePanel( form )
                 conf.addresses[addr] = nil
             end
         end
-        CFCHTTP.SaveFileConfig( {
+        CFCHTTP.SaveFileConfig( "cfc_cl_http_whitelist_config.json", {
             version = "1",
             addresses = conf.addresses
         } )
