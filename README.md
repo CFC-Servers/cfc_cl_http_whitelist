@@ -13,8 +13,8 @@ Configs are layered so one config doesnt not completely overwrite an earlier con
 
 Configuration load order on client
 - Loads default config from `lua/cfc_http_retrictions/default_config.lua`
-- Loasd additional configs from `lua/cfc_http_restrictions/configs/*.lua`
-- Loads additional configs from lua/cfc_http_restrictions/configs/client/*.lua`
+- Loads additional configs from `lua/cfc_http_restrictions/configs/*.lua`
+- Loads additional configs from `lua/cfc_http_restrictions/configs/client/*.lua`
 - Loads networked config if it exists
 - Loads clientside config from `data/cfc_cl_http_whitelist_config.json`
 
