@@ -1,4 +1,4 @@
-# cfc_cl_http_whitelist
+# CFC HTTP Whitelist
 Attempts to block any http request on clients that are not in the defined whitelist
 
 * [Configuring](#configuring)
