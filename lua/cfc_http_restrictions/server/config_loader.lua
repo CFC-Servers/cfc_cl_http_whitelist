@@ -35,6 +35,3 @@ AddCSLuaFile( CFCHTTP.filenames.defaultLuaConfig )
 addCSLuaConfigs(CFCHTTP.filenames.sharedConfigsDir)
 addCSLuaConfigs( CFCHTTP.filenames.clientConfigsDir)
 loadConfigsServer()
-
-
-
