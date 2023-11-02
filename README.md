@@ -2,9 +2,9 @@
 Blocks http requests and references in HTML to addresses not in the allowed list of addresses.
 
 * [Configuring](#configuring)
-  * [How it works](##how-it-works)
-  * [Configuring the addon](##configuring-the-addon)
-  * [Client convars](##clientside-convars)
+  * [How it works](#how-it-works)
+  * [Configuring the addon](#configuring-the-addon)
+  * [Client convars](#clientside-convars)
 * [Integrating with your addon](#integrating-with-your-addon)
 * [Known Issues](#known-issues)
 
