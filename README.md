@@ -6,6 +6,7 @@ Blocks http requests and references in HTML to addresses not in the allowed list
   * [Configuring your server](##configuring-your-server)
   * [Client convars](##clientside-convars)
   * [Known Issues](#known-issues)
+* [Integrating with your addon](#integrating-with-your-addon)
 
 # Configuring 
 ## How it works
@@ -47,3 +48,12 @@ The best way to configure your server is using lua files.
 - Some filetypes will not work with sound.playURL. This is intentional and will likely not be fixed. these filetypes would allow you to bypass the whitelist.
 Wav, mp3, and any other audio filetype should work. If a filetype that should be allowed is being blocked please create a github issue with a link to the file.
 - Radio streams will not work. This may be fixed, this is an unfortunate side effect of checking the file content of audio files before playing with sound.PlayURL.
+
+# Integrating with your addon
+Anything not listed here has no guarantee of backwards compatability
+## Functions
+- `CFCHTTP.GetOptionsForURL(url)` gets the config options for a url to check if its allowed
+- `CFCHTTP.LogRequest( tbl )` logs a request in the console
+## Variables
+`CFCHTTP.BASS_ERROR_BLOCKED_URI = 11001` custom error code returned by sound.PlayURL
+`CFCHTTP.BASS_ERROR_BLOCKED_CONTENT = 11002` custom error code returned by sound.PlayURL

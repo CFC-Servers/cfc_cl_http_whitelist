@@ -1,7 +1,7 @@
 
 local function getSourceFromStack(stack)
    local s = stack[3]
-   for i=4, 5 do
+   for i = 4, 5 do
       if not stack[i] then break end
       s = stack[i]
 

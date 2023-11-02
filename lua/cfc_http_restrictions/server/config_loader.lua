@@ -5,7 +5,7 @@ local function sendClientConfig( ply )
     local data = util.Compress( util.TableToJSON( CFCHTTP.networkedClientConfig ) )
     net.Start( "CFCHTTP_ConfigUpdate" )
     net.WriteDouble( #data )
-    net.WriteData( data, #data)
+    net.WriteData( data, #data )
     net.Send( ply )
 end
 
@@ -31,7 +31,8 @@ local function addCSLuaConfigs( dir )
     end
 end
 
+
 AddCSLuaFile( CFCHTTP.filenames.defaultLuaConfig )
-addCSLuaConfigs(CFCHTTP.filenames.sharedConfigsDir)
-addCSLuaConfigs( CFCHTTP.filenames.clientConfigsDir)
+addCSLuaConfigs( CFCHTTP.filenames.sharedConfigsDir )
+addCSLuaConfigs( CFCHTTP.filenames.clientConfigsDir )
 loadConfigsServer()
