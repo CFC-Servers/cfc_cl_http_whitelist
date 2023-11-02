@@ -3,7 +3,7 @@ Blocks http requests and references in HTML to addresses not in the allowed list
 
 * [Configuring](#configuring)
   * [How it works](##how-it-works)
-  * [Configuring your server](##configuring-your-server)
+  * [Configuring the addon](##configuring-the-addon)
   * [Client convars](##clientside-convars)
 * [Integrating with your addon](#integrating-with-your-addon)
 * [Known Issues](#known-issues)
@@ -20,12 +20,12 @@ Configuration load order on client
 - Loads networked config if it exists
 - Loads clientside config from `data/cfc_cl_http_whitelist_config.json`
 
-## Configuring your server
-The best way to configure your server is using lua files.   
+## Configuring the addon
+The best way to configure this addon is using lua files.   
 *do NOT edit default_config.lua or any other file in this addon to change the config*
 
 - Fork or copy the template repo found here https://github.com/cfc-servers/cfc_http_whitelist_config_template
-- Modify the repo to allow or deny any domains you need. See [Configuration Options] for a list of options you can use in your address config 
+- Modify the repo to allow or deny any domains you need. See [Configuration Options](##configuration-options) for a list of options you can use in your address config 
 - Put that repo in the addons folder on your server
 
 
