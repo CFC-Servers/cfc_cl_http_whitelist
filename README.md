@@ -5,8 +5,8 @@ Blocks http requests and references in HTML to addresses not in the allowed list
   * [How it works](##how-it-works)
   * [Configuring your server](##configuring-your-server)
   * [Client convars](##clientside-convars)
-  * [Known Issues](#known-issues)
 * [Integrating with your addon](#integrating-with-your-addon)
+* [Known Issues](#known-issues)
 
 # Configuring 
 ## How it works
