@@ -1,52 +1,58 @@
----@package
-function CFCHTTP.loadClientFileConfig()
-    local fileConfig = CFCHTTP.ReadFileConfig()
-    if fileConfig then
-        CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, fileConfig )
-    end
-end
+CFCHTTP.filenames = {
+    defaultLuaConfig = "cfc_http_restrictions/default_config.lua",
+    defaultJsonConfig = "cfc_cl_http_whitelist_config.json",
+    serverClientJsonConfig = "cfchttp_client_config.json",
+    sharedConfigsDir = "cfc_http_restrictions/configs/",
+    serverConfigsDir = "cfc_http_restrictions/configs/server/",
+    clientConfigsDir = "cfc_http_restrictions/configs/client/",
+}
 
----@package
----@param dir string|nil
-function CFCHTTP.loadLuaConfigs( dir )
-    dir = dir or "cfc_http_restrictions/configs/"
-    local files = file.Find( dir .. "*.lua", "LUA" )
-    for _, fil in pairs( files ) do
-        local newConfig = include( dir .. fil )
-        if newConfig then
-            CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, newConfig )
+---@param sources (fun(): WhitelistConfig)[]
+function CFCHTTP.LoadConfig( sources )
+    CFCHTTP.config = include( CFCHTTP.filenames.defaultLuaConfig )
+    for _, source in pairs( sources ) do
+        local config = source()
+        if config then
+            CFCHTTP.config = CFCHTTP.mergeConfigs( CFCHTTP.config, config )
         end
     end
 end
 
----@package
----@param dir string|nil
-function CFCHTTP.addCSLuaConfigs( dir )
-    dir = dir or "cfc_http_restrictions/configs/"
-    local files = file.Find( dir .. "*.lua", "LUA" )
-    for _, fil in pairs( files ) do
-        AddCSLuaFile( dir .. fil )
+---@param filename string
+---@return fun(): WhitelistConfig|nil
+function CFCHTTP.FileSource( filename )
+    return function()
+        return CFCHTTP.ReadFileConfig( filename )
     end
 end
 
----@package
----@param configFile string|nil
-function CFCHTTP.loadDefaultConfg( configFile )
-    configFile = configFile or "cfc_http_restrictions/default_config.lua"
-    CFCHTTP.config = include( configFile )
+---@param filename string
+---@return fun(): WhitelistConfig
+function CFCHTTP.LuaFileSource( filename )
+    return function()
+        return include( filename )
+    end
 end
 
-function CFCHTTP.LoadConfigsClient()
-    CFCHTTP.loadDefaultConfg()
-    CFCHTTP.loadLuaConfigs()
-    CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/client/" )
-    CFCHTTP.loadClientFileConfig()
+---@param dir string
+---@return fun(): WhitelistConfig ...
+function CFCHTTP.LuaDirectorySources( dir )
+    local funcs = {}
+    local files = file.Find( dir .. "*.lua", "LUA" )
+
+    for _, fil in pairs( files ) do
+        table.insert( funcs, CFCHTTP.LuaFileSource( dir .. fil ) )
+    end
+
+    return unpack( funcs )
 end
 
-function CFCHTTP.LoadConfigsServer()
-    CFCHTTP.loadDefaultConfg()
-    CFCHTTP.loadLuaConfigs()
-    CFCHTTP.loadLuaConfigs( "cfc_http_restrictions/configs/server/" )
+---@param tbl WhitelistConfig
+---@return fun(): WhitelistConfig
+function CFCHTTP.LuaTableSources( tbl )
+    return function()
+        return tbl
+    end
 end
 
 ---@param old any
@@ -79,26 +85,21 @@ function CFCHTTP.CopyConfig( cfg )
     return util.JSONToTable( util.TableToJSON( cfg ) )
 end
 
+---@param filename string
 ---@param config WhitelistConfig
-function CFCHTTP.SaveFileConfig( config )
-    file.Write( "cfc_cl_http_whitelist_config.json", util.TableToJSON( config, true ) )
+function CFCHTTP.SaveFileConfig( filename, config )
+    file.Write( filename, util.TableToJSON( config, true ) )
 
-    notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
+    if CLIENT then
+        notification.AddLegacy( "Saved http whitelist", NOTIFY_GENERIC, 5 )
+    end
 end
 
+---@param filename string
 ---@return WhitelistConfig|nil
-function CFCHTTP.ReadFileConfig()
-    local fileData = file.Read( "cfc_cl_http_whitelist_config.json" )
+function CFCHTTP.ReadFileConfig( filename )
+    local fileData = file.Read( filename )
     if not fileData then return nil end
 
     return util.JSONToTable( fileData )
-end
-
-if CLIENT then
-    CFCHTTP.LoadConfigsClient()
-else
-    CFCHTTP.addCSLuaConfigs()
-    CFCHTTP.addCSLuaConfigs( "cfc_http_restrictions/configs/client/" )
-
-    CFCHTTP.LoadConfigsServer()
 end
