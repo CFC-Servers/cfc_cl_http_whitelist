@@ -2,6 +2,12 @@ util.AddNetworkString( "CFCHTTP_ConfigUpdate" )
 util.AddNetworkString( "CFCHTTP_RequestConfig" )
 
 local function sendClientConfig( ply )
+    if not CFCHTTP.networkedClientConfig then
+        net.Start( "CFCHTTP_ConfigUpdate" )
+        net.WriteDouble( 0 )
+        net.Send( ply )
+    end
+
     local data = util.Compress( util.TableToJSON( CFCHTTP.networkedClientConfig ) )
     net.Start( "CFCHTTP_ConfigUpdate" )
     net.WriteDouble( #data )
@@ -21,7 +27,7 @@ local function loadConfigsServer()
     } )
 
     local data = file.Read( CFCHTTP.filenames.serverClientJsonConfig, "DATA" )
-    CFCHTTP.networkedClientConfig = data and util.JSONToTable( data ) or {}
+    CFCHTTP.networkedClientConfig = data and util.JSONToTable( data )
 end
 
 local function addCSLuaConfigs( dir )

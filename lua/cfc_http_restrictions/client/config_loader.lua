@@ -14,11 +14,12 @@ end
 
 net.Receive( "CFCHTTP_ConfigUpdate", function()
     local l = net.ReadDouble()
-    local config = util.JSONToTable( util.Decompress( net.ReadData( l ) ) )
-    CFCHTTP.networkedConfig = config
-
-    loadConfigsClient()
-    CFCHTTP.repopulateListPanel()
+    if l > 0 then
+        local config = util.JSONToTable( util.Decompress( net.ReadData( l ) ) )
+        CFCHTTP.networkedConfig = config
+        loadConfigsClient()
+        CFCHTTP.repopulateListPanel()
+    end
 end )
 
 loadConfigsClient()
