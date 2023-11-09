@@ -6,6 +6,7 @@ local function sendClientConfig( ply )
         net.Start( "CFCHTTP_ConfigUpdate" )
         net.WriteDouble( 0 )
         net.Send( ply )
+        return
     end
 
     local data = util.Compress( util.TableToJSON( CFCHTTP.networkedClientConfig ) )
