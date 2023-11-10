@@ -4,12 +4,14 @@ local function requestNetworkedConfig()
 end
 
 local function loadConfigsClient()
-    CFCHTTP.LoadConfig( {
-        CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.sharedConfigsDir ),
-        CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.clientConfigsDir ),
-        CFCHTTP.LuaTableSources( CFCHTTP.networkedConfig ),
-        CFCHTTP.FileSource( CFCHTTP.filenames.defaultJsonConfig ),
-    } )
+    ---@type (fun(): WhitelistConfig)[]
+    local configSources = {}
+    table.Add(configSources, CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.sharedConfigsDir ))
+    table.Add(configSources, CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.clientConfigsDir ))
+    table.insert(configSources, CFCHTTP.LuaTableSources( CFCHTTP.networkedConfig ) )
+    table.insert(configSources, CFCHTTP.FileSource( CFCHTTP.filenames.defaultJsonConfig ))
+
+    CFCHTTP.LoadConfig( configSources )
 end
 
 net.Receive( "CFCHTTP_ConfigUpdate", function()

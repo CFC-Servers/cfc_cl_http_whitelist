@@ -35,8 +35,9 @@ function CFCHTTP.LuaFileSource( filename )
 end
 
 ---@param dir string
----@return fun(): WhitelistConfig ...
+---@return fun(): WhitelistConfig[]
 function CFCHTTP.LuaDirectorySources( dir )
+    ---@type (fun(): WhitelistConfig)[]
     local funcs = {}
     local files = file.Find( dir .. "*.lua", "LUA" )
 
@@ -44,7 +45,7 @@ function CFCHTTP.LuaDirectorySources( dir )
         table.insert( funcs, CFCHTTP.LuaFileSource( dir .. fil ) )
     end
 
-    return unpack( funcs )
+    return funcs
 end
 
 ---@param tbl WhitelistConfig
