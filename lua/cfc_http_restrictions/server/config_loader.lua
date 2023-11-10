@@ -21,11 +21,11 @@ CFCHTTP.Net.receiveWithMiddleware( "CFCHTTP_RequestConfig", function( _, ply )
 end, CFCHTTP.Net.rateLimit( "CFCHTTP_RequestConfig", 2, 10 ) )
 
 local function loadConfigsServer()
-    CFCHTTP.LoadConfig( {
-        CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.sharedConfigsDir ),
-        CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.serverConfigsDir ),
-        CFCHTTP.FileSource( CFCHTTP.filenames.defaultJsonConfig ),
-    } )
+    local configSources = {}
+    table.Add(configSources, CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.sharedConfigsDir ))
+    table.Add(configSources, CFCHTTP.LuaDirectorySources( CFCHTTP.filenames.serverConfigsDir ))
+    table.insert(configSources, CFCHTTP.FileSource( CFCHTTP.filenames.defaultJsonConfig ))
+    CFCHTTP.LoadConfig( configSources )
 
     local data = file.Read( CFCHTTP.filenames.serverClientJsonConfig, "DATA" )
     CFCHTTP.networkedClientConfig = data and util.JSONToTable( data )
