@@ -31,6 +31,9 @@ local config = {
         ["developer.valvesoftware.com"] = { allowed = true },
         ["avatars.cloudflare.steamstatic.com"] = { allowed = true },
         ["avatars.akamai.steamstatic.com"] = { allowed = true },
+        ["steamuserimages-a.akamaihd.net"] = { allowed = true },
+        ["images.akamai.steamusercontent.com"] = { allowed = true },
+        ["steamcdn-a.akamaihd.net"] = { allowed = true },
 
         ["api.github.com"] = { allowed = true },
         ["github.com"] = { allowed = true },
@@ -70,10 +73,6 @@ local config = {
         ["hastebin.nl"] = { allowed = true },
 
         ["puu.sh"] = { allowed = true },
-
-        ["images.akamai.steamusercontent.com"] = { allowed = true },
-
-        ["steamcdn-a.akamaihd.net"] = { allowed = true },
 
         ["facepunch.com"] = { allowed = true },
         ["*.facepunch.com"] = { allowed = true },
