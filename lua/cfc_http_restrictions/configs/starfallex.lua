@@ -1,4 +1,5 @@
-if not file.Exists("entities/starfall_processor", "LUA") then return end
+---@diagnostic disable-next-line: undefined-global
+if not file.Exists( "entities/starfall_processor/cl_init.lua", "LUA" ) then return end
 
 AddCSLuaFile()
 

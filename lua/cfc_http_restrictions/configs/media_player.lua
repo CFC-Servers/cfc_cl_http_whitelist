@@ -1,4 +1,4 @@
-if not file.Exists("entities/mediaplayer_tv", "LUA") then return end
+if not file.Exists( "entities/mediaplayer_tv/shared.lua", "LUA" ) then return end
 
 AddCSLuaFile()
 

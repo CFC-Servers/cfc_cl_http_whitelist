@@ -35,7 +35,7 @@ function CFCHTTP.LuaFileSource( filename )
 end
 
 ---@param dir string
----@return fun(): WhitelistConfig[]
+---@return (fun(): WhitelistConfig)[]
 function CFCHTTP.LuaDirectorySources( dir )
     ---@type (fun(): WhitelistConfig)[]
     local funcs = {}
