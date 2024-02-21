@@ -1,4 +1,7 @@
 # CFC HTTP Whitelist
+<p align="left">
+    <a href="https://discord.gg/5JUqZjzmYJ" alt="Discord Invite"><img src="https://img.shields.io/discord/981394195812085770?label=Support&logo=discord&logoColor=white" /></a>
+</p>
 Blocks http requests and references in HTML to addresses not in the allowed list of addresses.
 
 * [Configuring](#configuring)
