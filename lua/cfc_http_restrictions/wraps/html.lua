@@ -23,9 +23,9 @@ local function wrapHTMLPanel( panelName )
             local isAllowed = options and options.allowed
 
             local logUrl = { url = url, status = isAllowed and "allowed" or "replaced" }
-            table.insert( logUrls, logUrl )
 
             if not isAllowed then
+                table.insert( logUrls, logUrl )
                 return CFCHTTP.GetRedirectURL( url )
             end
 
@@ -52,8 +52,9 @@ local function wrapHTMLPanel( panelName )
             local isAllowed = options and options.allowed
 
             local logUrl = { url = url, status = isAllowed and "allowed" or "replaced" }
-            table.insert( logUrls, logUrl )
+
             if not isAllowed then
+                table.insert( logUrls, logUrl )
                 return CFCHTTP.GetRedirectURL( url )
             end
 
