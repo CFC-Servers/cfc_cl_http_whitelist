@@ -50,6 +50,7 @@ local config = {
         -- google drive
         ["docs.google.com"] = { allowed = true },
         ["drive.google.com"] = { allowed = true },
+        ["*.googleusercontent.com"] = { allowed = true },
 
         -- youtube
         ["www.youtube.com"] = { allowed = true },
