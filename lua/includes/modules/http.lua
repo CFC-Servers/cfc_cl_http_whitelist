@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 -- file.Read is not available yet
-local originalFile = file.Open( "lua/includes/modules/http.lua", "rb", "MOD" )
+local originalFile = file.Open( "garrysmod/lua/includes/modules/http.lua", "r", "BASE_PATH" )
 local code = originalFile:Read( originalFile:Size() )
 originalFile:Close()
 
