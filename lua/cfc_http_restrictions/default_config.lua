@@ -23,6 +23,10 @@ local config = {
         -- this is used internally by this addon, removing it could cause issues
         ["gmhttp.pages.dev"] = { allowed = true, noisy = true, permanent = true },
 
+        -- Used in https://github.com/CFC-Servers/gm_express
+        ["gmod.express"] = { allowed = true, noisy = true, permanent = true },
+        ["stg.gmod.express"] = { allowed = true, noisy = true, permanent = true },
+
         ["google.com"] = { allowed = true, noisy = true },
         ["www.google.com"] = { allowed = true, noisy = true },
 
