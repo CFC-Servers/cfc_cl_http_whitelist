@@ -7,13 +7,10 @@ originalFile:Close()
 
 local f = CompileString( code, "lua/includes/modules/http.lua", false )
 
+ProtectedCall( include, "cfc_http_restrictions/wraps/http.lua" )
+
 if CLIENT then
-    ProtectedCall( function()
-        include( "cfc_http_restrictions/wraps/http.lua" )
-    end )
-    ProtectedCall( function()
-        include( "cfc_http_restrictions/wraps/playURL.lua" )
-    end )
+    ProtectedCall( include, "cfc_http_restrictions/wraps/playURL.lua" )
 end
 
 print( "Running wrapped http.lua" )

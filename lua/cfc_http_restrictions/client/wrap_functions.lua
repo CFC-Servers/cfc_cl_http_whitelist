@@ -1,5 +1,3 @@
 hook.Add( "Initialize", "CFC_HttpWhitelist_WrapHTML", function()
-    ProtectedCall( function()
-        include( "cfc_http_restrictions/wraps/html.lua" )
-    end )
+    ProtectedCall( include, "cfc_http_restrictions/wraps/dhtml.lua" )
 end )
