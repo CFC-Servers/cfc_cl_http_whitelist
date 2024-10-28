@@ -5,4 +5,4 @@ on:
 
 jobs:
   run-tests:
-    uses: CFC-Servers/GLuaTest/.github/workflows/gluatest.yml@main
+    uses: CFC-Servers/GLuaTest/.github/workflows/run_tests.yml@main
