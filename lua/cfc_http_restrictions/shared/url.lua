@@ -10,8 +10,8 @@ CFCHTTP.URLPattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
 -- Deprecated
 CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" \\]*"
 
-CFCHTTP.URLPatternNoGroupsNoPath = "%a+://[^:/ \t\"]+:?%d*"
-CFCHTTP.URLPatternNoGroupsHasPath = "%a+://[^:/ \t\"]+:?%d*/[^\n\" \\]*"
+CFCHTTP.URLPatternNoGroupsNoPath = "%a+://[^:/;'%(%) \t\"]+:?%d*"
+CFCHTTP.URLPatternNoGroupsHasPath = CFCHTTP.URLPaternNoGroupsNoPath .. "/[^\n\" \\]*"
 
 
 ---@param url string
