@@ -6,7 +6,13 @@
 
 
 CFCHTTP.URLPattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
-CFCHTTP.URLPatternNoGroups = "%a+://[^:/'\"%) \t\"]+:?%d*/?[^\n\" \\]*"
+
+-- Deprecated
+CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" \\]*"
+
+CFCHTTP.URLPatternNoGroupsNoPath = "%a+://[^:/ \t\"]+:?%d*"
+CFCHTTP.URLPatternNoGroupsHasPath = "%a+://[^:/ \t\"]+:?%d*/[^\n\" \\]*"
+
 
 ---@param url string
 ---@return URLData
@@ -55,7 +61,8 @@ end
 ---@param f fun( url:string ):string
 ---@return string
 function CFCHTTP.ReplaceURLs( text, f )
-    local html = string.gsub( text, CFCHTTP.URLPatternNoGroups, f )
+    local html = string.gsub( text, CFCHTTP.URLPatternNoGroupsNoPath, f )
+    html = string.gsub( html, CFCHTTP.URLPatternNoGroupsHasPath, f )
     return html
 end
 
