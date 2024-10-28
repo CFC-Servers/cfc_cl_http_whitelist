@@ -6,7 +6,7 @@
 
 
 CFCHTTP.URLPattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
-CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" \\]*"
+CFCHTTP.URLPatternNoGroups = "%a+://[^:/'\"%) \t\"]+:?%d*/?[^\n\" \\]*"
 
 ---@param url string
 ---@return URLData
