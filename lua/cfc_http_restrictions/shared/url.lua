@@ -11,7 +11,7 @@ CFCHTTP.URLPattern = "(%a+)://([^:/ \t]+):?(%d*)/?.*"
 CFCHTTP.URLPatternNoGroups = "%a+://[^:/ \t\"]+:?%d*/?[^\n\" \\]*"
 
 CFCHTTP.URLPatternNoGroupsNoPath = "%a+://[^:/;'%(%) \t\"]+:?%d*"
-CFCHTTP.URLPatternNoGroupsHasPath = CFCHTTP.URLPaternNoGroupsNoPath .. "/[^\n\" \\]*"
+CFCHTTP.URLPatternNoGroupsHasPath = CFCHTTP.URLPatternNoGroupsNoPath .. "/[^\n\" \\]*"
 
 
 ---@param url string
