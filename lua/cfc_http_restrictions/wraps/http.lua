@@ -14,7 +14,6 @@ end
 
 local function wrapHTTP()
     _HTTP = _HTTP or HTTP
-    print( "HTTP wrapped, original function at '_G._HTTP'" )
 
     HTTP = function( req )
         local options = CFCHTTP.GetOptionsForURL( req.url )
