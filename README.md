@@ -46,6 +46,7 @@ The best way to configure this addon is using lua files.
 | cfc_http_restrictions_log_allows | 1 | Should log allowed HTTP requests? |
 | cfc_http_restrictions_log_blocks | 1 | Should log blocked HTTP requests |
 | cfc_http_restrictions_log_verbose | 0 | Should the logs include verbose messages? noisy domains and full urls. |
+| cfc_http_restrictions_error_on_blocks | 0 | Should a non-halting error be thrown when a request is blocked? |
 
 ## Serverside Convars
 | name | default | description |
