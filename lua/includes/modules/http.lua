@@ -7,11 +7,16 @@ originalFile:Close()
 
 local f = CompileString( code, "lua/includes/modules/http.lua", false )
 
-ProtectedCall( include, "cfc_http_restrictions/wraps/http.lua" )
+if SERVER then
+    local svEnabled = CreateConVar( "cfc_http_restrictions_sv_enabled", "0", FCVAR_ARCHIVE, "Enable server-side HTTP whitelisting", 0, 1 )
+    if svEnabled:GetBool() then
+        ProtectedCall( include, "cfc_http_restrictions/wraps/http.lua" )
+    end
+end
 
 if CLIENT then
+    ProtectedCall( include, "cfc_http_restrictions/wraps/http.lua" )
     ProtectedCall( include, "cfc_http_restrictions/wraps/playURL.lua" )
 end
 
-print( "Running wrapped http.lua" )
 f()
