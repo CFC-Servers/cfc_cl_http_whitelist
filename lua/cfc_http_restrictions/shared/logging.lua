@@ -10,6 +10,7 @@ local COLORS = {
 local shouldLogAllows = CreateConVar( "cfc_http_restrictions_log_allows", "1", FCVAR_ARCHIVE, "Should the HTTP restrictions log allowed HTTP requests?", 0, 1 )
 local shouldLogBlocks = CreateConVar( "cfc_http_restrictions_log_blocks", "1", FCVAR_ARCHIVE, "Should the HTTP restrictions log blocked HTTP requests?", 0, 1 )
 local verboseLogging = CreateConVar( "cfc_http_restrictions_log_verbose", "0", FCVAR_ARCHIVE, "Should the HTTP restrictions log include verbose messages?", 0, 1 )
+local errorOnBlocks = CreateConVar( "cfc_http_restrictions_error_on_blocks", "0", FCVAR_ARCHIVE, "Should the HTTP restrictions produce a Lua error on blocked HTTP requests?", 0, 1 )
 
 local statusColors = {
     ALLOWED = COLORS.GREEN,
@@ -44,6 +45,10 @@ function CFCHTTP.LogRequest( input )
         local requestColor = statusColors[requestStatus] or COLORS.GREY
         if not shouldLogAllows:GetBool() and requestStatus == "ALLOWED" then return end
         if not shouldLogBlocks:GetBool() and requestStatus == "BLOCKED" then return end
+
+        if requestStatus == "BLOCKED" and errorOnBlocks:GetBool() then
+            ErrorNoHaltWithStack( "Blocked HTTP request to: " .. url )
+        end
 
         MsgC(
             requestColor, requestStatus,
